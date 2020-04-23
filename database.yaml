@@ -1,0 +1,6 @@
+# This file is only used when running migrations using: aqueduct db ...
+username: validicity
+password: validicity
+host: localhost
+port: 5432
+databaseName: validicity

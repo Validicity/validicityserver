@@ -1,0 +1,23 @@
+# This is the config for deployment
+database:
+  username: validicity
+  password: validicity
+  host: localhost
+  port: 5432
+  databaseName: validicity
+
+mqtt:
+  # Needs to be added to /etc/vernemq/vmq.passwd, see README.md
+  username: validicity
+  password: Ow81JJ73LAX
+  host: localhost
+
+#scheduler:
+#  reportsSchedule: '*/1 * * * *' # Once every minute
+
+#email:
+#  host: smtp.eu.sparkpostmail.com
+#  username: SMTP_Injection
+#  password: XXXXXXX  # Insert key here
+
+host: prod.validi.city
