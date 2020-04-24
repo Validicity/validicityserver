@@ -1,0 +1,14 @@
+#!/usr/bin/env dart
+import 'package:validicityserver/validicityserver.dart';
+
+Future main() async {
+  var app = new Application<ValidicityServerChannel>()
+      ..options.configurationFilePath = "config.yaml"
+      ..options.address = "127.0.0.1"
+      ..options.port = 7777;
+
+  await app.start(numberOfInstances: Platform.numberOfProcessors);
+
+  print("Validicity server started on port: ${app.options.port}.");
+  print("Use Ctrl-C (SIGINT) to stop running.");
+} 
