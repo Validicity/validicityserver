@@ -7,7 +7,7 @@ Run `validicityserver` from this directory.
 
 If you wish to use the debugger in your IDE, launch `validicityserver` from your IDE. If you use VSCode there is already a launcher defined.
 
-You must have a `config.yaml` file that has connection information to a locally running PostgreSQL database. If you have a standard PostgreSQL installation (at least on Linux) you can run `setup.sh` to create the database and user for Validicityserver.
+You must have a `config.yaml` file that has connection information to a locally running PostgreSQL database. If you have a standard PostgreSQL project (at least on Linux) you can run `setup.sh` to create the database and user for Validicityserver.
 
 Then, to provision that database with this application's schema, run the following command from this directory:
 
@@ -18,9 +18,9 @@ aqueduct db upgrade
 This will apply the migrations that you can also look at in the `migrations` directory. A new migration is created with `aqueduct db generate` after code has been modified.
 
 ## Running Application Tests
-This application is tested against a local PostgreSQL database that is **fully separate from the Validicity database**. The test harness (`test/harness/app.dart`) creates database tables for each `ManagedObject` subclass declared in this application. These tables are discarded when the tests complete. This means you can always run the unit tests in the `test` directory against this temporary database, without disturbing the existing real database.
+This application is tested against a local PostgreSQL database that is **fully separate from the Validicity database**. The test harness (`test/harness/app.dart`) creates database tables for each `ManagedObject` subclass declared in this application. These tables are discarded when the tests complete. This means you can always run the sample tests in the `test` directory against this temporary database, without disturbing the existing real database.
 
-For this to work the local database installation must have a database named `dart_test`, for which a user named `dart` (with password `dart`) has full privileges to. The following command creates this database and user on a locally running PostgreSQL database:
+For this to work the local database project must have a database named `dart_test`, for which a user named `dart` (with password `dart`) has full privileges to. The following command creates this database and user on a locally running PostgreSQL database:
 
 ```
 aqueduct setup
@@ -60,10 +60,11 @@ aqueduct document
 This will print a JSON OpenAPI specification to stdout.
 
 ## Authentication
-Validicity uses OAuth 2.0 and in order for users to be able to login, they need the client application to be registered first. This is done whenever we add a new application that can access the API, so typically the Validicity CLI tool `valid` is one client, the `validicityclient` is another, the mobile application is yet another. This is how such client ids are registered:
+Validicity uses OAuth 2.0 and in order for users to be able to login, they need the client application to be registered first. This is done whenever we add a new application that can access the API, so typically the Validicity CLI tool `valid` is one client, the `validicityclient` is another, the mobile application is yet another. This is how such client ids are registered with their allowed scopes (UserTypes):
 
-        aqueduct auth add-client --id city.validi.valid --allowed-scopes "admin valid validicityclient user"
-        aqueduct auth add-client --id city.validi.mobile --allowed-scopes "admin user"
+        aqueduct auth add-client --id city.validi.valid --allowed-scopes "admin client user superuser"
+        aqueduct auth add-client --id city.validi.mobile --allowed-scopes "admin user superuser"
+        aqueduct auth add-client --id city.validi.client --allowed-scopes "client"
 
 ## Nginx
 Install:
@@ -255,9 +256,9 @@ Then also create and copy a specific validicity key pair to the server:
         ssh-keygen  # Naming it id_rsa_validicity
         ssh-copy-id -i .ssh/id_rsa_validicity validicity@validi.city
 
-Create a systemd service `/etc/systemd/system/transformer.service`:
+Create a systemd service `/etc/systemd/system/validicityserver.service`:
 
-        [Unit]
+        [Sample]
         Description=Validicityserver
         Documentation=http://github.com/validicity/validicityserver.git
         After=network.target
