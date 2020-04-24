@@ -13,7 +13,7 @@ class OrganisationProjectController extends ResourceController {
   Future<Response> getAllProjects(
       @Bind.path('organisationid') int organisationid) async {
     // Find Projects for Organisation
-    query.where((project) => project.owner.id).equalTo(organisationid);
+    query.where((project) => project.organisation.id).equalTo(organisationid);
     var projects = await query.fetch();
     if (projects == null) {
       return Response.notFound();

@@ -92,8 +92,7 @@ Future main() async {
               "extId": isString,
               "name": isString,
               "description": isString,
-              "metadata": isMap,
-              "credential": null
+              "metadata": isMap
             }
           }
         ]));

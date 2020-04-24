@@ -5,7 +5,7 @@ import 'harness/app.dart';
 Future main() async {
   Harness harness = new Harness()..install();
 
-  test("POST /project creates an Project if Organisation exists", () async {
+  test("POST /project creates a Project if Organisation exists", () async {
     var organisation = await harness.getOrganisation();
     var response = await harness.makeProjectResponse(organisation);
     expect(
@@ -23,7 +23,7 @@ Future main() async {
         }));
   });
 
-  test("GET /project/1 gets an Project if it exists", () async {
+  test("GET /project/1 gets a Project if it exists", () async {
     var organisation = await harness.getOrganisation();
     await harness.makeProjectResponse(organisation);
     var response = await harness.adminAgent.get("/project/1");
@@ -42,7 +42,7 @@ Future main() async {
         }));
   });
 
-  test("POST /project fails to create an Project if Organisation is missing",
+  test("POST /project fails to create a Project if Organisation is missing",
       () async {
     var response = await harness.adminAgent.post("/project", body: {
       "extId": "whatever",

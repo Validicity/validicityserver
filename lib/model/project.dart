@@ -44,7 +44,7 @@ class _Project {
   String location;
 
   @Relate(#projects)
-  Organisation owner;
+  Organisation organisation;
 
   // All Samples assigned to this Project
   ManagedSet<Sample> samples;

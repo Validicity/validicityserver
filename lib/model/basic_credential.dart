@@ -64,7 +64,4 @@ class _BasicCredential {
   String username;
 
   String password;
-
-  /// Organisation protected by this credential
-  Organisation organisation;
 }

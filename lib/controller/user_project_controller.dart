@@ -14,7 +14,7 @@ class UserProjectController extends ResourceController {
 
   Query<UserProject> query;
 
-  /// Add access to an Project for a given User
+  /// Add access to a Project for a given User
   @Operation.post('userid', 'id')
   Future<Response> addAccess(
       @Bind.path('userid') int userid, @Bind.path('id') int id) async {
@@ -46,7 +46,7 @@ class UserProjectController extends ResourceController {
     var upQuery = userQuery.join(set: (user) => user.userProjects);
     var projQuery = upQuery.join(object: (ui) => ui.project);
     // For all Projects, also join in Organisations
-    projQuery.join(object: (im) => im.owner);
+    projQuery.join(object: (im) => im.organisation);
     // Fetch only one User
     var user = await userQuery.fetchOne();
     if (user == null) {

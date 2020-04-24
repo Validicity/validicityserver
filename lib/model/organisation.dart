@@ -1,4 +1,3 @@
-import 'package:validicityserver/model/basic_credential.dart';
 import 'package:validicityserver/model/project.dart';
 import 'package:validicityserver/model/user.dart';
 

@@ -27,7 +27,7 @@ Future main() async {
     var response = await harness.adminAgent.post("/sample", body: {
       "extId": "whatever",
       "serial": "XX000001",
-      "state": "inStock",
+      "state": "destructed",
       "project": {"id": 1},
       "metadata": {}
     });

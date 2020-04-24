@@ -21,8 +21,7 @@ Future main() async {
           "modified": isTimestamp,
           "name": "Org",
           "description": "Nice",
-          "metadata": {},
-          "credential": null
+          "metadata": {}
         }));
   });
 
@@ -47,8 +46,7 @@ Future main() async {
           "description": "Nice",
           "created": createdObject["created"],
           "modified": createdObject["modified"],
-          "metadata": {},
-          "credential": null
+          "metadata": {}
         }));
   });
 }
