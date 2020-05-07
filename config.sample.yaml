@@ -12,12 +12,12 @@ mqtt:
   password: Ow81JJ73LAX
   host: localhost
 
-#scheduler:
-#  reportsSchedule: '*/1 * * * *' # Once every minute
+scheduler:
+  reportsSchedule: '*/1 * * * *' # Once every minute
 
-#email:
-#  host: smtp.eu.sparkpostmail.com
-#  username: SMTP_Injection
-#  password: XXXXXXX  # Insert key here
+email:
+  host: smtp.eu.sparkpostmail.com
+  username: SMTP_Injection
+  password: XXXXXXX  # Insert key here
 
 host: prod.validi.city

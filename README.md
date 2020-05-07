@@ -117,6 +117,8 @@ server {
 }
 ```
 
+
+
 ## Letsencrypt
 Install certbot:
 
@@ -149,9 +151,9 @@ Add Dart repo:
         sudo sh -c 'curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
         sudo sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
 
-And then:
+And then install Dart 2.7.2 (latest does not yet work):
 
-        apt update && install dart
+        sudo apt update && sudo apt install dart=2.7.2-1
 
 ## PostgreSQL
 We use PostgreSQL's apt repository to stay on track of updates of PostgreSQL:
@@ -186,10 +188,10 @@ Then we need to change password for the postgres user:
 Finally we want to make a "Validicity" user and a "dart" user:
 
         sudo su postgres
-        psql -c 'create database Validicity;'
-        psql -c 'create user Validicity;'
-        psql -c "alter user Validicity with password 'Validicity';"
-        psql -c 'grant all on database Validicity to Validicity;'
+        psql -c 'create database validicity;'
+        psql -c 'create user validicity;'
+        psql -c "alter user validicity with password 'validicity';"
+        psql -c 'grant all on database validicity to validicity;'
         psql -c 'create database dart_test;'
         psql -c 'create user dart with createdb;'
         psql -c "alter user dart with password 'dart';"
@@ -218,33 +220,6 @@ Add this to .bashrc:
         eval `ssh-agent`
         ssh-add ~/.ssh/id_rsa_validicity
 
-## Validicity
-Add to ~/.profile;
-
-        export PATH=$PATH:/usr/lib/dart/bin
-        export PATH="$PATH":"$HOME/.pub-cache/bin"
-
-Then:
-
-        git clone git@github.com:Validicity/validicitylib.git
-        git clone git@github.com:Validicity/valid.git
-        git clone git@github.com:Validicity/validicityserver.git
-
-        cd validicitylib
-        pub get
-
-        cd ../validicityserver
-        pub get
-
-Activate aqueduct tool:
-
-        pub global activate aqueduct 
-
-Then apply migrations:
-
-        aqueduct db upgrade
-
-
 Make validicity sudoer:
 
         usermod -aG sudo validicity
@@ -255,6 +230,40 @@ Then also create and copy a specific validicity key pair to the server:
 
         ssh-keygen  # Naming it id_rsa_validicity
         ssh-copy-id -i .ssh/id_rsa_validicity validicity@validi.city
+
+
+## Validicity
+Add to ~/.profile, to reach more dart tools;
+
+        export PATH=$PATH:/usr/lib/dart/bin
+        export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+Then:
+
+        git clone git@github.com:Validicity/validicitylib.git
+        git clone git@github.com:Validicity/validicityserver.git
+
+        cd validicitylib
+        pub get
+
+        cd ../validicityserver
+        pub get
+
+Run tests:
+
+        pub run test
+
+Activate aqueduct tool (use same command to upgrade it):
+
+        pub global activate aqueduct 
+
+Then apply migrations:
+
+        aqueduct db upgrade
+
+And copy config sample and edit if needde:
+
+        cp config.sample.yaml config.yaml
 
 Create a systemd service `/etc/systemd/system/validicityserver.service`:
 
@@ -278,3 +287,11 @@ Create a systemd service `/etc/systemd/system/validicityserver.service`:
 
         [Install]
         WantedBy=multi-user.target
+
+Now add it:
+
+        sudo systemctl daemon-reload
+        sudo systemctl enable validicityserver.service
+        sudo systemctl start validicityserver.service
+
+Check status with `sudo systemctl status validicityserver`

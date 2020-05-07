@@ -76,7 +76,7 @@ class EmailServiceConfiguration extends Configuration {
 
   /// Default from address
   @optionalConfiguration
-  String fromAddress = 'validicity@mail.validi.city';
+  String fromAddress = 'validicity@validi.city';
 
   /// Default from name
   @optionalConfiguration
