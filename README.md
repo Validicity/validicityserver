@@ -59,12 +59,6 @@ aqueduct document
 
 This will print a JSON OpenAPI specification to stdout.
 
-## Authentication
-Validicity uses OAuth 2.0 and in order for users to be able to login, they need the client application to be registered first. This is done whenever we add a new application that can access the API, so typically the Validicity CLI tool `valid` is one client, the `validicityclient` is another, the mobile application is yet another. This is how such client ids are registered with their allowed scopes (UserTypes):
-
-        aqueduct auth add-client --id city.validi.valid --allowed-scopes "admin client user superuser"
-        aqueduct auth add-client --id city.validi.mobile --allowed-scopes "admin user superuser"
-        aqueduct auth add-client --id city.validi.client --allowed-scopes "client"
 
 ## Nginx
 Install:
@@ -295,3 +289,11 @@ Now add it:
         sudo systemctl start validicityserver.service
 
 Check status with `sudo systemctl status validicityserver`
+
+
+## Authentication
+Validicity uses OAuth 2.0 and in order for users to be able to login, they need the client application to be registered first. This is done whenever we add a new application that can access the API, so typically the Validicity CLI tool `validicitytool` is one client, the `validicityclient` is another, the mobile application is yet another. This is how such client ids are registered with their allowed scopes (UserTypes):
+
+        aqueduct auth add-client --id city.validi.validicitytool --allowed-scopes "admin client user superuser"
+        aqueduct auth add-client --id city.validi.mobile --allowed-scopes "admin user superuser"
+        aqueduct auth add-client --id city.validi.validicityclient --allowed-scopes "client"

@@ -5,6 +5,7 @@ import 'package:validicityserver/controller/organisation_controller.dart';
 import 'package:validicityserver/controller/organisation_project_controller.dart';
 import 'package:validicityserver/controller/project_controller.dart';
 import 'package:validicityserver/controller/project_sample_controller.dart';
+import 'package:validicityserver/controller/sample_scan_controller.dart';
 import 'package:validicityserver/controller/status_controller.dart';
 import 'package:validicityserver/controller/sample_controller.dart';
 import 'package:validicityserver/controller/sample_find_controller.dart';
@@ -133,7 +134,7 @@ class ValidicityServerChannel extends ApplicationChannel {
     // The other controllers are accessible to all users.
     router
       ..route("/status")
-          .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
+          .link(() => Authorizer.bearer(authServer, scopes: ["user", "client"]))
           .link(() => statusController)
       ..route("/self/:username")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
@@ -156,6 +157,9 @@ class ValidicityServerChannel extends ApplicationChannel {
       ..route("/sample/:id/state/[:state]")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
           .link(() => SampleStateController(context))
+      ..route("/sample/:id/scan")
+          .link(() => Authorizer.bearer(authServer, scopes: ["user", "client"]))
+          .link(() => SampleScanController(context))
       ..route("/project/:projectid/sample/find/[:serial]")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
           .link(() => SampleFindController(context));
