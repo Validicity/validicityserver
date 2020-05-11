@@ -5,6 +5,7 @@ import 'package:validicityserver/controller/organisation_controller.dart';
 import 'package:validicityserver/controller/organisation_project_controller.dart';
 import 'package:validicityserver/controller/project_controller.dart';
 import 'package:validicityserver/controller/project_sample_controller.dart';
+import 'package:validicityserver/controller/register_key_controller.dart';
 import 'package:validicityserver/controller/sample_scan_controller.dart';
 import 'package:validicityserver/controller/status_controller.dart';
 import 'package:validicityserver/controller/sample_controller.dart';
@@ -49,8 +50,8 @@ class ValidicityServerChannel extends ApplicationChannel {
     RequestBody.maxSize = 20 * 1024 * 1024 * 1024;
     // When developing, turn these lines off later
     Controller.includeErrorDetailsInServerErrorResponses = true;
-    //hierarchicalLoggingEnabled = true;
-    //logger.level = Level.ALL;
+    hierarchicalLoggingEnabled = true;
+    logger.level = Level.ALL;
 
     logger.onRecord.listen(
         (rec) => print("$rec ${rec.error ?? ""} ${rec.stackTrace ?? ""}"));
@@ -136,6 +137,9 @@ class ValidicityServerChannel extends ApplicationChannel {
       ..route("/status")
           .link(() => Authorizer.bearer(authServer, scopes: ["user", "client"]))
           .link(() => statusController)
+      ..route("/key/:publicKey")
+          .link(() => Authorizer.bearer(authServer, scopes: ["client", "user"]))
+          .link(() => RegisterKeyController(context))
       ..route("/self/:username")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
           .link(() => UserSelfController(context, authServer))

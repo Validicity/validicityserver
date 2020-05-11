@@ -135,12 +135,19 @@ class _User extends ResourceOwnerTableDefinition {
   @Column(unique: true)
   String email;
 
+  @Column(unique: true)
+  String publicKey;
+
   @Column(nullable: true, omitByDefault: true)
   int lastCode;
 
   // The full name of the user
   @Column(defaultValue: "''")
   String name;
+
+  // A unique id, for clients this is the board id
+  @Column(nullable: true)
+  String uniqueId;
 
   DateTime created;
   DateTime modified;
