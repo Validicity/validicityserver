@@ -11,7 +11,6 @@ class Sample extends ManagedObject<_Sample> implements _Sample {
 
   Sample.fromSerial(String serial) {
     this.serial = serial;
-    extId = "";
     metadata = Document({});
   }
 
@@ -89,17 +88,29 @@ class Sample extends ManagedObject<_Sample> implements _Sample {
 }
 
 class _Sample {
+  // -------- These fields are not included in the block
   @primaryKey
   int id;
 
   DateTime created;
   DateTime modified;
+  // --------
 
-  @Column(indexed: true)
-  String extId; // External id
+  /// Cryptographic hash of this record
+  @Column(unique: true, indexed: true)
+  String hash;
+
+  /// Previous record hash in the same Project, or Project hash.
+  @Column(unique: true)
+  String previous;
+
+  /// Cryptographic signature of this record
+  String signature;
+
+  /// Creator of this record
+  String publicKey;
 
   /// The serial identifier for the Sample, the NFC tag id?
-  @Column(unique: true)
   String serial;
 
   /// The current state of the Sample's lifecycle

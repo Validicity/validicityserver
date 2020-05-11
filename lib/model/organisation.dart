@@ -19,13 +19,28 @@ class Organisation extends ManagedObject<_Organisation>
 }
 
 class _Organisation {
+  // -------- These fields are not included in the block
   @primaryKey
   int id;
 
   DateTime created;
   DateTime modified;
+  // --------
 
-  String extId; // External id, typically in Fortnox or similar
+  /// Cryptographic hash of this record
+  @Column(unique: true, indexed: true)
+  String hash;
+
+  /// Root hash of Organisation, a random.
+  @Column(unique: true)
+  String previous;
+
+  /// Cryptographic signature of this record
+  String signature;
+
+  /// Creator of this record
+  String publicKey;
+
   String name;
   String description;
 

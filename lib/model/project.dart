@@ -26,11 +26,27 @@ class Project extends ManagedObject<_Project> implements _Project {
 }
 
 class _Project {
+  // -------- These fields are not included in the block
   @primaryKey
   int id;
 
   DateTime created;
   DateTime modified;
+  // --------
+
+  /// Cryptographic hash of this record
+  @Column(unique: true, indexed: true)
+  String hash;
+
+  /// Organisation hash.
+  @Column(unique: true)
+  String previous;
+
+  /// Cryptographic signature of this record
+  String signature;
+
+  /// Creator of this record
+  String publicKey;
 
   String extId; // External id, typically in ... a CRM system? Or other
 
