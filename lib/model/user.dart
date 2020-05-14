@@ -135,7 +135,7 @@ class _User extends ResourceOwnerTableDefinition {
   @Column(unique: true)
   String email;
 
-  @Column(unique: true)
+  @Column(nullable: true, unique: true)
   String publicKey;
 
   @Column(nullable: true, omitByDefault: true)
