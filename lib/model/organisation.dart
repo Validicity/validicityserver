@@ -26,7 +26,7 @@ class _Organisation {
   DateTime created;
   DateTime modified;
   // --------
-
+/*
   /// Cryptographic hash of this record
   @Column(unique: true, indexed: true)
   String hash;
@@ -40,6 +40,7 @@ class _Organisation {
 
   /// Creator of this record
   String publicKey;
+  */
 
   String name;
   String description;

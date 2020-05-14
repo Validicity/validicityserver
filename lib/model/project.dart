@@ -33,7 +33,7 @@ class _Project {
   DateTime created;
   DateTime modified;
   // --------
-
+/*
   /// Cryptographic hash of this record
   @Column(unique: true, indexed: true)
   String hash;
@@ -47,7 +47,7 @@ class _Project {
 
   /// Creator of this record
   String publicKey;
-
+*/
   @Column(unique: true)
   String name;
   String description;
