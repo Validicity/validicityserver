@@ -100,7 +100,6 @@ class Harness extends TestHarness<ValidicityServerChannel>
 
   Future<TestResponse> makeProjectResponse(Map organisation) async {
     var response = await adminAgent.post("/project", body: {
-      "extId": "whatever",
       "name": "Project",
       "description": "Cool",
       "location": "Europe/Stockholm",

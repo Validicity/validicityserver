@@ -48,8 +48,6 @@ class _Project {
   /// Creator of this record
   String publicKey;
 
-  String extId; // External id, typically in ... a CRM system? Or other
-
   @Column(unique: true)
   String name;
   String description;

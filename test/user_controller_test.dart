@@ -22,14 +22,9 @@ Future main() async {
   }
 
   Future<Map> createOrganisationProjectAndUser() async {
-    await harness.adminAgent.post("/organisation", body: {
-      "extId": "whatever",
-      "name": "Org",
-      "description": "Nice",
-      "metadata": {}
-    });
+    await harness.adminAgent.post("/organisation",
+        body: {"name": "Org", "description": "Nice", "metadata": {}});
     await harness.adminAgent.post("/project", body: {
-      "extId": "whatever",
       "name": "Project",
       "description": "Cool",
       "organisation": {"id": 1},
@@ -80,7 +75,6 @@ Future main() async {
             "id": 1,
             "created": isTimestamp,
             "modified": isTimestamp,
-            "extId": isNotNull,
             "name": "Project",
             "description": "Cool",
             "location": null,
@@ -89,7 +83,6 @@ Future main() async {
               "id": 1,
               "created": isTimestamp,
               "modified": isTimestamp,
-              "extId": isString,
               "name": isString,
               "description": isString,
               "metadata": isMap

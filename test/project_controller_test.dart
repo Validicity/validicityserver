@@ -11,7 +11,7 @@ Future main() async {
     expect(
         response,
         hasResponse(200, body: {
-          "extId": "whatever",
+          "": "whatever",
           "id": isNotNull,
           "organisation": {"id": organisation['id']},
           "created": isTimestamp,
@@ -30,7 +30,6 @@ Future main() async {
     expect(
         response,
         hasResponse(200, body: {
-          "extId": "whatever",
           "id": isNotNull,
           "organisation": {"id": organisation['id']},
           "created": isTimestamp,
@@ -45,7 +44,6 @@ Future main() async {
   test("POST /project fails to create a Project if Organisation is missing",
       () async {
     var response = await harness.adminAgent.post("/project", body: {
-      "extId": "whatever",
       "name": "Project",
       "organisation": {"id": 99},
       "description": "Cool",
@@ -61,7 +59,6 @@ Future main() async {
     var organisation = await harness.getOrganisation();
     await harness.makeProjectResponse(organisation);
     var response = await harness.adminAgent.put("/project/1", body: {
-      "extId": "whatever",
       "name": "Project",
       "description": "Cooler",
       "metadata": {"some": 43}
@@ -69,7 +66,6 @@ Future main() async {
     expect(
         response,
         hasResponse(200, body: {
-          "extId": "whatever",
           "id": isNotNull,
           "organisation": {"id": organisation['id']},
           "created": isTimestamp,

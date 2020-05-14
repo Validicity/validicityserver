@@ -7,12 +7,11 @@ Future main() async {
   Harness harness = new Harness()..install();
 
   test("POST /sample creates a Sample without Project", () async {
-    var response = await harness.adminAgent.post("/sample",
-        body: {"extId": "whatever", "serial": "XX000001", "metadata": {}});
+    var response = await harness.adminAgent
+        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
     expect(
         response,
         hasResponse(200, body: {
-          "extId": "whatever",
           "id": isNotNull,
           "created": isTimestamp,
           "modified": isTimestamp,
@@ -25,7 +24,6 @@ Future main() async {
 
   test("POST /sample fails to create a Sample with a bad state", () async {
     var response = await harness.adminAgent.post("/sample", body: {
-      "extId": "whatever",
       "serial": "XX000001",
       "state": "destructed",
       "project": {"id": 1},
@@ -40,7 +38,6 @@ Future main() async {
   test("POST /sample fails to create a Sample with non existing Project",
       () async {
     var response = await harness.adminAgent.post("/sample", body: {
-      "extId": "whatever",
       "serial": "XX000001",
       "project": {"id": 1},
       "metadata": {}
@@ -52,21 +49,15 @@ Future main() async {
   });
 
   test("POST /sample create a Sample with existing Project", () async {
-    await harness.adminAgent.post("/organisation", body: {
-      "extId": "whatever",
-      "name": "Org",
-      "description": "Nice",
-      "metadata": {}
-    });
+    await harness.adminAgent.post("/organisation",
+        body: {"name": "Org", "description": "Nice", "metadata": {}});
     await harness.adminAgent.post("/project", body: {
-      "extId": "whatever",
       "name": "Project",
       "description": "Cool",
       "organisation": {"id": 1},
       "metadata": {}
     });
     var response = await harness.adminAgent.post("/sample", body: {
-      "extId": "whatever",
       "serial": "XX000001",
       "project": {"id": 1},
       "metadata": {}
@@ -74,7 +65,6 @@ Future main() async {
     expect(
         response,
         hasResponse(200, body: {
-          "extId": "whatever",
           "id": isNotNull,
           "created": isTimestamp,
           "modified": isTimestamp,
@@ -86,8 +76,8 @@ Future main() async {
   });
 
   test("GET /sample/:id returns previously created Sample", () async {
-    var response = await harness.adminAgent.post("/sample",
-        body: {"extId": "whatever", "serial": "XX000001", "metadata": {}});
+    var response = await harness.adminAgent
+        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
     final createdObject = response.body.as<Map>();
     response = await harness.adminAgent
         .request("/sample/${createdObject["id"]}")
@@ -96,7 +86,6 @@ Future main() async {
         response,
         hasResponse(200, body: {
           "id": createdObject["id"],
-          "extId": "whatever",
           "serial": "XX000001",
           "created": createdObject["created"],
           "modified": createdObject["modified"],
@@ -107,8 +96,8 @@ Future main() async {
   });
 
   test("PUT /sample/:id updated Sample with new state", () async {
-    var response = await harness.adminAgent.post("/sample",
-        body: {"extId": "whatever", "serial": "XX000001", "metadata": {}});
+    var response = await harness.adminAgent
+        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
     final createdObject = response.body.as<Map>();
     createdObject["state"] = enumString(SampleState.assigned);
     var id = createdObject.remove("id");
@@ -117,7 +106,6 @@ Future main() async {
         response,
         hasResponse(200, body: {
           "id": id,
-          "extId": "whatever",
           "serial": "XX000001",
           "created": createdObject["created"],
           "modified": isTimestamp,
@@ -130,8 +118,8 @@ Future main() async {
   test(
       "PUT /sample/:id fails to update Sample with state not allowed for this user",
       () async {
-    var response = await harness.adminAgent.post("/sample",
-        body: {"extId": "whatever", "serial": "XX000001", "metadata": {}});
+    var response = await harness.adminAgent
+        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
     final createdObject = response.body.as<Map>();
     createdObject["state"] = enumString(SampleState.assigned);
     var id = createdObject.remove("id");
@@ -146,8 +134,8 @@ Future main() async {
   test(
       "PUT /sample/:id succeeds to update Sample with state allowed for this user",
       () async {
-    var response = await harness.adminAgent.post("/sample",
-        body: {"extId": "whatever", "serial": "XX000001", "metadata": {}});
+    var response = await harness.adminAgent
+        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
     final createdObject = response.body.as<Map>();
     createdObject["state"] = enumString(SampleState.used);
     var id = createdObject.remove("id");
@@ -161,8 +149,8 @@ Future main() async {
   test(
       "PUT /sample/:id fails to update Sample with state allowed for this user but not from current state",
       () async {
-    var response = await harness.adminAgent.post("/sample",
-        body: {"extId": "whatever", "serial": "XX000001", "metadata": {}});
+    var response = await harness.adminAgent
+        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
     final createdObject = response.body.as<Map>();
     createdObject["state"] = enumString(SampleState.used);
     var id = createdObject.remove("id");
@@ -175,8 +163,8 @@ Future main() async {
   });
 
   test("GET /sample/:id returns previously created Sample", () async {
-    var response = await harness.adminAgent.post("/sample",
-        body: {"extId": "whatever", "serial": "XX000001", "metadata": {}});
+    var response = await harness.adminAgent
+        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
     final createdObject = response.body.as<Map>();
     response = await harness.adminAgent
         .request("/sample/${createdObject["id"]}")
@@ -185,7 +173,6 @@ Future main() async {
         response,
         hasResponse(200, body: {
           "id": createdObject["id"],
-          "extId": "whatever",
           "serial": "XX000001",
           "created": createdObject["created"],
           "modified": createdObject["modified"],
