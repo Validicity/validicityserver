@@ -85,12 +85,8 @@ class Harness extends TestHarness<ValidicityServerChannel>
 
   /// Reusable functions for tests
   Future<TestResponse> getOrganisationResponse() async {
-    var response = await adminAgent.post("/organisation", body: {
-      "extId": "whatever",
-      "name": "Winniepeg",
-      "description": "Nice",
-      "metadata": {}
-    });
+    var response = await adminAgent.post("/organisation",
+        body: {"name": "Winniepeg", "description": "Nice", "metadata": {}});
     return response;
   }
 

@@ -11,7 +11,6 @@ Future main() async {
     expect(
         response,
         hasResponse(200, body: {
-          "": "whatever",
           "id": isNotNull,
           "organisation": {"id": organisation['id']},
           "created": isTimestamp,

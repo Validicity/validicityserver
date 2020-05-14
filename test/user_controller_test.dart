@@ -16,6 +16,8 @@ Future main() async {
           "username": "gokr",
           "type": "user",
           "organisation": null,
+          "publicKey": null,
+          "uniqueId": null,
           "email": "goran.krampe@gmail.com"
         }));
     return response.body.as<Map>();
@@ -35,6 +37,8 @@ Future main() async {
       "name": "Göran Krampe",
       "type": "user",
       "password": "nice",
+      "publicKey": null,
+      "uniqueId": null,
       "email": "goran.krampe@gmail.com"
     });
     return checkUser(response);
@@ -126,6 +130,8 @@ Future main() async {
             "type": "user",
             "username": "gokr",
             "name": "Göran Krampe",
+            "publicKey": null,
+            "uniqueId": null,
             "organisation": null
           }
         ]));

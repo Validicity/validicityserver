@@ -7,14 +7,24 @@ Future main() async {
   Harness harness = new Harness()..install();
 
   test("POST /sample creates a Sample without Project", () async {
-    var response = await harness.adminAgent
-        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
+    var response = await harness.adminAgent.post("/sample", body: {
+      "hash": "AA",
+      "previous": "root",
+      "signature": "sig",
+      "publicKey": "creator",
+      "serial": "XX000001",
+      "metadata": {}
+    });
     expect(
         response,
         hasResponse(200, body: {
           "id": isNotNull,
           "created": isTimestamp,
           "modified": isTimestamp,
+          "hash": "AA",
+          "previous": "root",
+          "signature": "sig",
+          "publicKey": "creator",
           "serial": "XX000001",
           "state": enumString(SampleState.registered),
           "metadata": {},
@@ -24,6 +34,10 @@ Future main() async {
 
   test("POST /sample fails to create a Sample with a bad state", () async {
     var response = await harness.adminAgent.post("/sample", body: {
+      "hash": "AA",
+      "previous": "root",
+      "signature": "sig",
+      "publicKey": "creator",
       "serial": "XX000001",
       "state": "destructed",
       "project": {"id": 1},
@@ -38,6 +52,10 @@ Future main() async {
   test("POST /sample fails to create a Sample with non existing Project",
       () async {
     var response = await harness.adminAgent.post("/sample", body: {
+      "hash": "AA",
+      "previous": "root",
+      "signature": "sig",
+      "publicKey": "creator",
       "serial": "XX000001",
       "project": {"id": 1},
       "metadata": {}
@@ -58,6 +76,10 @@ Future main() async {
       "metadata": {}
     });
     var response = await harness.adminAgent.post("/sample", body: {
+      "hash": "AA",
+      "previous": "root",
+      "signature": "sig",
+      "publicKey": "creator",
       "serial": "XX000001",
       "project": {"id": 1},
       "metadata": {}
@@ -68,6 +90,10 @@ Future main() async {
           "id": isNotNull,
           "created": isTimestamp,
           "modified": isTimestamp,
+          "hash": "AA",
+          "previous": "root",
+          "signature": "sig",
+          "publicKey": "creator",
           "serial": "XX000001",
           "state": enumString(SampleState.registered),
           "metadata": {},
@@ -76,8 +102,14 @@ Future main() async {
   });
 
   test("GET /sample/:id returns previously created Sample", () async {
-    var response = await harness.adminAgent
-        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
+    var response = await harness.adminAgent.post("/sample", body: {
+      "hash": "AA",
+      "previous": "root",
+      "signature": "sig",
+      "publicKey": "creator",
+      "serial": "XX000001",
+      "metadata": {}
+    });
     final createdObject = response.body.as<Map>();
     response = await harness.adminAgent
         .request("/sample/${createdObject["id"]}")
@@ -87,93 +119,10 @@ Future main() async {
         hasResponse(200, body: {
           "id": createdObject["id"],
           "serial": "XX000001",
-          "created": createdObject["created"],
-          "modified": createdObject["modified"],
-          "state": enumString(SampleState.registered),
-          "metadata": {},
-          "project": isNull
-        }));
-  });
-
-  test("PUT /sample/:id updated Sample with new state", () async {
-    var response = await harness.adminAgent
-        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
-    final createdObject = response.body.as<Map>();
-    createdObject["state"] = enumString(SampleState.assigned);
-    var id = createdObject.remove("id");
-    response = await harness.adminAgent.put("/sample/$id", body: createdObject);
-    expect(
-        response,
-        hasResponse(200, body: {
-          "id": id,
-          "serial": "XX000001",
-          "created": createdObject["created"],
-          "modified": isTimestamp,
-          "state": enumString(SampleState.assigned), // assigned!
-          "metadata": {},
-          "project": isNull
-        }));
-  });
-
-  test(
-      "PUT /sample/:id fails to update Sample with state not allowed for this user",
-      () async {
-    var response = await harness.adminAgent
-        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
-    final createdObject = response.body.as<Map>();
-    createdObject["state"] = enumString(SampleState.assigned);
-    var id = createdObject.remove("id");
-    var agent = await harness.createUserAgent();
-    response = await agent.put("/sample/$id", body: createdObject);
-    expect(
-        response,
-        hasResponse(400,
-            body: {"error": "sample_state_not_allowed", "detail": isString}));
-  });
-
-  test(
-      "PUT /sample/:id succeeds to update Sample with state allowed for this user",
-      () async {
-    var response = await harness.adminAgent
-        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
-    final createdObject = response.body.as<Map>();
-    createdObject["state"] = enumString(SampleState.used);
-    var id = createdObject.remove("id");
-    response = await harness.adminAgent.put("/sample/$id", body: createdObject);
-    var agent = await harness.createUserAgent();
-    createdObject["state"] = enumString(SampleState.used);
-    response = await agent.put("/sample/$id", body: createdObject);
-    expect(response, hasResponse(200));
-  });
-
-  test(
-      "PUT /sample/:id fails to update Sample with state allowed for this user but not from current state",
-      () async {
-    var response = await harness.adminAgent
-        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
-    final createdObject = response.body.as<Map>();
-    createdObject["state"] = enumString(SampleState.used);
-    var id = createdObject.remove("id");
-    var agent = await harness.createUserAgent();
-    response = await agent.put("/sample/$id", body: createdObject);
-    expect(
-        response,
-        hasResponse(400,
-            body: {"error": "sample_state_not_allowed", "detail": isString}));
-  });
-
-  test("GET /sample/:id returns previously created Sample", () async {
-    var response = await harness.adminAgent
-        .post("/sample", body: {"serial": "XX000001", "metadata": {}});
-    final createdObject = response.body.as<Map>();
-    response = await harness.adminAgent
-        .request("/sample/${createdObject["id"]}")
-        .get();
-    expect(
-        response,
-        hasResponse(200, body: {
-          "id": createdObject["id"],
-          "serial": "XX000001",
+          "hash": "AA",
+          "previous": "root",
+          "signature": "sig",
+          "publicKey": "creator",
           "created": createdObject["created"],
           "modified": createdObject["modified"],
           "state": enumString(SampleState.registered),
