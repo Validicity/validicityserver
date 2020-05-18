@@ -26,16 +26,17 @@ class SampleSubmissionController extends ResourceController {
     var previousSample = await query.fetchOne();
     if (previousSample == null) {
       // First block!
-      if (sample.previous != null) {
+      if (sample.previous != "00") {
         return Response.badRequest(
             body:
-                'Incorrect record chaining, first block has currently null for previous');
+                'Incorrect record chaining, first block has currently "00" for previous');
       }
-    }
-    if (sample.previous != previousSample.hash) {
-      return Response.badRequest(
-          body:
-              'Incorrect record chaining, this block previous does not match hash of previous record');
+    } else {
+      if (sample.previous != previousSample.hash) {
+        return Response.badRequest(
+            body:
+                'Incorrect record chaining, this block previous does not match hash of previous record');
+      }
     }
     // Insert into database
     query.values = sample;
