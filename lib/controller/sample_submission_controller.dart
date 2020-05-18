@@ -15,7 +15,7 @@ class SampleSubmissionController extends ResourceController {
       @Bind.path('serial') String serial, @Bind.body() Sample sample) async {
     var user = await User.currentUser(query.context, request);
     var publicKey = user.publicKey;
-    var verified = verifySignature(sample.signature, sample.hash, publicKey);
+    var verified = verify(sample.signature, sample.hash, publicKey);
     if (!verified) {
       return Response.badRequest(
           body: 'Sample record not properly signed by APU user $user');
