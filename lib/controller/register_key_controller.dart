@@ -13,6 +13,7 @@ class RegisterKeyController extends ResourceController {
   @Operation.post('publicKey')
   Future<Response> addSample(@Bind.path('publicKey') String publicKey) async {
     var user = await User.currentUser(query.context, request);
+    // TODO: Error handling - check already registered! Need blacklisting first etc
     query
       ..where((u) => u.id).equalTo(user.id)
       ..values.publicKey = publicKey;

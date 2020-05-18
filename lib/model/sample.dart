@@ -104,6 +104,10 @@ class _Sample {
   @Column(unique: true)
   String previous;
 
+  /// Next record hash in the same Project. If null this is the last record.
+  @Column(unique: true, nullable: true)
+  String next;
+
   /// Cryptographic signature of this record
   String signature;
 

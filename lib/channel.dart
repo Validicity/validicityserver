@@ -4,13 +4,11 @@ import 'package:validicityserver/controller/bootstrap_controller.dart';
 import 'package:validicityserver/controller/organisation_controller.dart';
 import 'package:validicityserver/controller/organisation_project_controller.dart';
 import 'package:validicityserver/controller/project_controller.dart';
-import 'package:validicityserver/controller/project_sample_controller.dart';
 import 'package:validicityserver/controller/register_key_controller.dart';
-import 'package:validicityserver/controller/sample_scan_controller.dart';
+import 'package:validicityserver/controller/sample_submission_controller.dart';
 import 'package:validicityserver/controller/status_controller.dart';
 import 'package:validicityserver/controller/sample_controller.dart';
 import 'package:validicityserver/controller/sample_find_controller.dart';
-import 'package:validicityserver/controller/sample_state_controller.dart';
 import 'package:validicityserver/controller/user_controller.dart';
 import 'package:validicityserver/controller/user_self_controller.dart';
 import 'package:validicityserver/controller/user_project_controller.dart';
@@ -18,7 +16,6 @@ import 'package:validicityserver/controller/recovery_controller.dart';
 import 'package:validicityserver/model/user.dart';
 import 'package:validicityserver/service/email_service.dart';
 import 'package:validicityserver/service/mqtt.dart';
-import 'package:validicityserver/service/basic_credential_verifier.dart';
 import 'package:validicityserver/service/validicityserver_scheduler.dart';
 
 import 'package:timezone/standalone.dart';
@@ -152,19 +149,16 @@ class ValidicityServerChannel extends ApplicationChannel {
       ..route("/project/[:id]")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
           .link(() => ProjectController(context))
-      ..route("/project/:projectid/sample/[:id]")
-          .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
-          .link(() => ProjectSampleController(context))
-      ..route("/sample/[:id]")
+//      ..route("/project/:projectid/sample/[:id]")
+//          .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
+//          .link(() => ProjectSampleController(context))
+      ..route("/sample/[:serial]")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
           .link(() => SampleController(context))
-      ..route("/sample/:id/state/[:state]")
-          .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
-          .link(() => SampleStateController(context))
-      ..route("/sample/:id/scan")
+      ..route("/sample/submit/[:serial]")
           .link(() => Authorizer.bearer(authServer, scopes: ["user", "client"]))
-          .link(() => SampleScanController(context))
-      ..route("/project/:projectid/sample/find/[:serial]")
+          .link(() => SampleSubmissionController(context))
+      ..route("/sample/find/[:serial]")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
           .link(() => SampleFindController(context));
 
