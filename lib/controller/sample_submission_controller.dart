@@ -40,6 +40,7 @@ class SampleSubmissionController extends ResourceController {
     }
     // Insert into database
     query.values = sample;
+    query.valueMap.remove('id');
     return Response.ok(await query.insert());
   }
 }
