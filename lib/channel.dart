@@ -132,10 +132,10 @@ class ValidicityServerChannel extends ApplicationChannel {
     // The other controllers are accessible to all users.
     router
       ..route("/status")
-          .link(() => Authorizer.bearer(authServer, scopes: ["user", "client"]))
+          .link(() => Authorizer.bearer(authServer, scopes: ["client"]))
           .link(() => statusController)
       ..route("/key/:publicKey")
-          .link(() => Authorizer.bearer(authServer, scopes: ["client", "user"]))
+          .link(() => Authorizer.bearer(authServer, scopes: ["client"]))
           .link(() => RegisterKeyController(context))
       ..route("/self/:username")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
@@ -253,6 +253,8 @@ class TransformerAuthDelegate extends ManagedAuthDelegate<User> {
         break;
       case UserType.client:
       case UserType.user:
+        // A user can do all things a client can do
+        scopes.add(AuthScope(typeToString(UserType.client)));
     }
     print("Scopes: $scopes");
     return scopes;
