@@ -100,8 +100,7 @@ class _Sample {
   @Column(unique: true, indexed: true)
   String hash;
 
-  /// Previous record hash in the same Project, or Project hash.
-  @Column(unique: true)
+  /// Previous record hash in the same Project, or Project hash (so not unique for first record in each chain)
   String previous;
 
   /// Next record hash in the same Project. If null this is the last record.
