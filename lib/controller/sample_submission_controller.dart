@@ -10,8 +10,9 @@ class SampleSubmissionController extends ResourceController {
   Query<Sample> query;
 
   /// Create a new Sample
-  @Operation.post()
-  Future<Response> submitSample(@Bind.body() Sample sample) async {
+  @Operation.post('serial')
+  Future<Response> submitSample(
+      @Bind.path('serial') String serial, @Bind.body() Sample sample) async {
     var user = await User.currentUser(query.context, request);
     var publicKey = user.publicKey;
     var verified = verifySignature(sample.signature, sample.hash, publicKey);
@@ -20,7 +21,7 @@ class SampleSubmissionController extends ResourceController {
           body: 'Sample record not properly signed by APU user $user');
     }
     query
-      ..where((u) => u.serial).equalTo(sample.serial)
+      ..where((u) => u.serial).equalTo(serial)
       ..where((u) => u.next).isNull();
     var previousSample = await query.fetchOne();
     if (previousSample == null) {
