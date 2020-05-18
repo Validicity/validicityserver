@@ -159,7 +159,7 @@ class ValidicityServerChannel extends ApplicationChannel {
           .link(() => Authorizer.bearer(authServer, scopes: ["user", "client"]))
           .link(() => SampleSubmissionController(context))
       ..route("/sample/find/[:serial]")
-          .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
+          .link(() => Authorizer.bearer(authServer, scopes: ["user", "client"]))
           .link(() => SampleFindController(context));
 
     return router;
