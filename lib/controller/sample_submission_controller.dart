@@ -43,12 +43,14 @@ class SampleSubmissionController extends ResourceController {
       }
     }
     var result = await query.context.transaction((transaction) async {
-      // Mark the previous record to refer to this new one
-      query
-        ..where((u) => u.serial).equalTo(serial)
-        ..where((u) => u.next).isNull()
-        ..values.next = sample.hash;
-      await query.updateOne();
+      if (previousSample != null) {
+        // Mark the previous record to refer to this new one
+        query
+          ..where((u) => u.serial).equalTo(serial)
+          ..where((u) => u.next).isNull()
+          ..values.next = sample.hash;
+        await query.updateOne();
+      }
       // And insert Sample into database
       query.values = sample;
       // We remove the id, should not be there
