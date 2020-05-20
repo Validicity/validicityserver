@@ -50,18 +50,20 @@ class SampleSubmissionController extends ResourceController {
       if (previousSample != null) {
         print("updating");
         // Mark the previous record to refer to this new one
-        query
+        var q = Query<Sample>(query.context);
+        q
           ..where((u) => u.serial).equalTo(serial)
           ..where((u) => u.next).isNull()
           ..values.next = sample.hash;
-        await query.updateOne();
+        await q.updateOne();
         print("updated");
       }
       // And insert Sample into database
-      query.values = sample;
+      var q = Query<Sample>(query.context);
+      q.values = sample;
       // We remove the id, should not be there
-      query.values.removePropertyFromBackingMap('id');
-      return await query.insert();
+      q.values.removePropertyFromBackingMap('id');
+      return await q.insert();
     });
     return Response.ok(result);
   }
