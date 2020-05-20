@@ -50,7 +50,7 @@ class SampleSubmissionController extends ResourceController {
       if (previousSample != null) {
         print("updating");
         // Mark the previous record to refer to this new one
-        var q = Query<Sample>(query.context);
+        var q = Query<Sample>(transaction);
         q
           ..where((u) => u.serial).equalTo(serial)
           ..where((u) => u.next).isNull()
@@ -59,7 +59,7 @@ class SampleSubmissionController extends ResourceController {
         print("updated");
       }
       // And insert Sample into database
-      var q = Query<Sample>(query.context);
+      var q = Query<Sample>(transaction);
       q.values = sample;
       // We remove the id, should not be there
       q.values.removePropertyFromBackingMap('id');
