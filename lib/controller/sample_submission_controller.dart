@@ -31,25 +31,31 @@ class SampleSubmissionController extends ResourceController {
     if (previousSample == null) {
       // OK, this is the first block!
       if (sample.previous != "00") {
+        print("Previous: ${sample.previous}");
         return Response.badRequest(
             body:
                 'Incorrect record chaining, first block should currently have "00" for previous');
       }
     } else {
       if (sample.previous != previousSample.hash) {
+        print("Previous2: ${sample.previous}");
         return Response.badRequest(
             body:
                 'Incorrect record chaining, this block previous does not match hash of previous record');
       }
     }
     var result = await query.context.transaction((transaction) async {
+      print("txn");
+
       if (previousSample != null) {
+        print("updating");
         // Mark the previous record to refer to this new one
         query
           ..where((u) => u.serial).equalTo(serial)
           ..where((u) => u.next).isNull()
           ..values.next = sample.hash;
         await query.updateOne();
+        print("updated");
       }
       // And insert Sample into database
       query.values = sample;
