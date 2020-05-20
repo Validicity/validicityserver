@@ -31,7 +31,6 @@ class SampleSubmissionController extends ResourceController {
     if (previousSample == null) {
       // OK, this is the first block!
       if (sample.previous != "00") {
-        print("Previous: ${sample.previous}");
         return Response.badRequest(
             body:
                 'Incorrect record chaining, first block should currently have "00" for previous');
@@ -45,10 +44,7 @@ class SampleSubmissionController extends ResourceController {
       }
     }
     var result = await query.context.transaction((transaction) async {
-      print("txn");
-
       if (previousSample != null) {
-        print("updating");
         // Mark the previous record to refer to this new one
         var q = Query<Sample>(transaction);
         q
@@ -56,7 +52,6 @@ class SampleSubmissionController extends ResourceController {
           ..where((u) => u.next).isNull()
           ..values.next = sample.hash;
         await q.updateOne();
-        print("updated");
       }
       // And insert Sample into database
       var q = Query<Sample>(transaction);
