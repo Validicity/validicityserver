@@ -1,5 +1,4 @@
 import 'package:validicitylib/util.dart';
-import 'package:validicityserver/model/basic_credential.dart';
 import 'package:validicityserver/model/user.dart';
 import 'package:validicityserver/validicityserver.dart';
 import 'package:aqueduct_test/aqueduct_test.dart';

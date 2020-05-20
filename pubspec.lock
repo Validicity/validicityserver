@@ -99,6 +99,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.4"
+  ed25519_dart:
+    dependency: transitive
+    description:
+      path: "."
+      ref: master
+      resolved-ref: a1362ec3319296c45620d411990fd3c7410e6ab1
+      url: "https://github.com/getcanoe/ed25519_dart"
+    source: git
+    version: "1.0.2"
   event_bus:
     dependency: transitive
     description:
