@@ -1,5 +1,4 @@
 import 'package:validicitylib/validicitylib.dart';
-import 'package:validicityserver/model/organisation.dart';
 
 import '../validicityserver.dart';
 
