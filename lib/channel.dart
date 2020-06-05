@@ -120,14 +120,14 @@ class ValidicityServerChannel extends ApplicationChannel {
       ..route("/user/[:username]")
           .link(() => Authorizer.bearer(authServer, scopes: ["superuser"]))
           .link(() => UserController(context, authServer));
-    var uic = UserProjectController(context);
+    var upc = UserProjectController(context);
     router
       ..route("/user/:userid/project/[:id]")
           .link(() => Authorizer.bearer(authServer, scopes: ["superuser"]))
-          .link(() => uic)
+          .link(() => upc)
       ..route("/project/:projectid/users")
           .link(() => Authorizer.bearer(authServer, scopes: ["superuser"]))
-          .link(() => uic);
+          .link(() => upc);
 
     // The other controllers are accessible to all users.
     router
