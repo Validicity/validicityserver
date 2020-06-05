@@ -1,13 +1,13 @@
 name: validicityserver
 description: The server component of Validicity that keeps track of everything.
-version: 0.1.0
+version: 0.3.0
 author: Göran Krampe <goran.krampe@gmail.com>
 
 environment:
-  sdk: ">=2.7.1"
+  sdk: ">=2.8.3"
 
 dependencies:
-  aqueduct: ^3.2.1
+  aqueduct: ^3.3.0+1
   safe_config: ^2.0.2
   mqtt_client: ^6.0.0
   pubspec: ^0.1.4
@@ -23,7 +23,10 @@ dependencies:
     path: ../validicitylib
     #git:
     #  url: git@github.com:Validicity/validicitylib.git
-      
+
+dependency_overrides:
+  postgres: 2.1.1
+
 dev_dependencies:
   test: ^1.6.3
   aqueduct_test: ^1.0.1
