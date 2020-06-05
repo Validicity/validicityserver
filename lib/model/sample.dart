@@ -72,7 +72,7 @@ class Sample extends ManagedObject<_Sample> implements _Sample {
       case UserType.client:
         return SampleState.values;
       case UserType.user:
-        return [SampleState.used, SampleState.destructed];
+        return SampleState.values;
       default:
         return [];
     }

@@ -15,12 +15,21 @@ class SampleSubmissionController extends ResourceController {
       @Bind.path('serial') String serial, @Bind.body() Sample sample) async {
     // Look up current user
     var user = await User.currentUser(query.context, request);
-    // Verify that the submitted Sample is signed by the user
+    // Verify that the User has registered a key
     var publicKey = user.publicKey;
+    if (publicKey == null) {
+      return Response.badRequest(body: {
+        "error": "no_public_key",
+        "detail": 'No public key registered for API user $user'
+      });
+    }
+    // Verify that the submitted Sample is signed by the user
     var verified = verify(sample.signature, sample.hash, publicKey);
     if (!verified) {
-      return Response.badRequest(
-          body: 'Sample record not properly signed by API user $user');
+      return Response.badRequest(body: {
+        "error": "bad_signature",
+        "detail": 'Sample record not properly signed by API user $user'
+      });
     }
     // Fetch the last known record for this Sample
     query
