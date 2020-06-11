@@ -137,7 +137,7 @@ class ValidicityServerChannel extends ApplicationChannel {
       ..route("/key/:publicKey")
           .link(() => Authorizer.bearer(authServer, scopes: ["client"]))
           .link(() => RegisterKeyController(context))
-      ..route("/self/:username")
+      ..route("/self")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
           .link(() => UserSelfController(context, authServer))
       ..route("/organisation/[:id]")
