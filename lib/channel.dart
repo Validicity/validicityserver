@@ -1,25 +1,25 @@
 import 'package:get_it/get_it.dart';
-import 'package:validicitylib/util.dart';
-import 'package:validicityserver/controller/bootstrap_controller.dart';
-import 'package:validicityserver/controller/organisation_controller.dart';
-import 'package:validicityserver/controller/organisation_project_controller.dart';
-import 'package:validicityserver/controller/project_controller.dart';
-import 'package:validicityserver/controller/register_key_controller.dart';
-import 'package:validicityserver/controller/sample_submission_controller.dart';
-import 'package:validicityserver/controller/status_controller.dart';
-import 'package:validicityserver/controller/sample_controller.dart';
-import 'package:validicityserver/controller/sample_find_controller.dart';
-import 'package:validicityserver/controller/user_controller.dart';
-import 'package:validicityserver/controller/user_self_controller.dart';
-import 'package:validicityserver/controller/user_project_controller.dart';
-import 'package:validicityserver/controller/recovery_controller.dart';
-import 'package:validicityserver/model/user.dart';
-import 'package:validicityserver/service/email_service.dart';
-import 'package:validicityserver/service/mqtt.dart';
-import 'package:validicityserver/service/validicityserver_scheduler.dart';
-
 import 'package:timezone/standalone.dart';
+import 'package:validicitylib/util.dart';
 
+import 'controller/bootstrap_controller.dart';
+import 'controller/organisation_controller.dart';
+import 'controller/organisation_project_controller.dart';
+import 'controller/project_controller.dart';
+import 'controller/project_sample_controller.dart';
+import 'controller/recovery_controller.dart';
+import 'controller/register_key_controller.dart';
+import 'controller/sample_controller.dart';
+import 'controller/sample_find_controller.dart';
+import 'controller/sample_submission_controller.dart';
+import 'controller/status_controller.dart';
+import 'controller/user_controller.dart';
+import 'controller/user_project_controller.dart';
+import 'controller/user_self_controller.dart';
+import 'model/user.dart';
+import 'service/email_service.dart';
+import 'service/mqtt.dart';
+import 'service/validicityserver_scheduler.dart';
 import 'validicityserver.dart';
 
 /// This type initializes an application.
@@ -149,9 +149,9 @@ class ValidicityServerChannel extends ApplicationChannel {
       ..route("/project/[:id]")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
           .link(() => ProjectController(context))
-//      ..route("/project/:projectid/sample/[:id]")
-//          .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
-//          .link(() => ProjectSampleController(context))
+      ..route("/project/:projectid/sample/[:id]")
+          .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
+          .link(() => ProjectSampleController(context))
       ..route("/sample/[:serial]")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
           .link(() => SampleController(context))
