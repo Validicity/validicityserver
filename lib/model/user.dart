@@ -91,13 +91,21 @@ regards, Validicity
     return await join.delete();
   }
 
-  // Do we have a mapping to this Project?
+  /// Do we have a mapping to this Project?
   Future<bool> canAccessProject(Project im, ManagedContext context) async {
     final join = Query<UserProject>(context);
     join
       ..where((u) => u.user).identifiedBy(id)
       ..where((im) => im).identifiedBy(im.id);
     return join.fetchOne() == null;
+  }
+
+  /// Return all Projects we have access to
+  Future<List<Project>> accessProjects(ManagedContext context) async {
+    final join = Query<UserProject>(context);
+    join..where((u) => u.user).identifiedBy(id);
+    var ups = await join.fetch();
+    return ups.map((ui) => ui.project).toList();
   }
 
   /// Easy function to find one by id
