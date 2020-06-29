@@ -35,7 +35,9 @@ class SampleSubmissionController extends ResourceController {
     query
       ..where((u) => u.serial).equalTo(serial)
       ..where((u) => u.next).isNull();
+    query.join(object: (s) => s.project);
     var previousSample = await query.fetchOne();
+    var project;
     // Is there no previous Sample record?
     if (previousSample == null) {
       // OK, this is the first block!
@@ -44,7 +46,18 @@ class SampleSubmissionController extends ResourceController {
             body:
                 'Incorrect record chaining, first block should currently have "00" for previous');
       }
+      // Pick Project from User's access list, we presume only one right now TODO: Fix this
+      var projects = await user.accessProjects(query.context);
+      if (projects.isEmpty) {
+        return Response.badRequest(body: {
+          "error": "no_project",
+          "detail": 'The user $user submitting has no project access'
+        });
+      } else {
+        project = projects.first;
+      }
     } else {
+      project = sample.project;
       if (sample.previous != previousSample.hash) {
         print("Previous2: ${sample.previous}");
         return Response.badRequest(
@@ -59,7 +72,8 @@ class SampleSubmissionController extends ResourceController {
         q
           ..where((u) => u.serial).equalTo(serial)
           ..where((u) => u.next).isNull()
-          ..values.next = sample.hash;
+          ..values.next = sample.hash
+          ..values.project = project;
         await q.updateOne();
       }
       // And insert Sample into database
