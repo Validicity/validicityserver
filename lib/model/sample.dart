@@ -34,7 +34,8 @@ class Sample extends ManagedObject<_Sample> implements _Sample {
     var proof = Proof();
     proof.hash = makeHash(
         "Sample with serial=$serial, signature=$signature and hash=$hash exists.");
-    return proof.submit(context);
+    await proof.submit(context);
+    return proof;
   }
 
   /// Find Sample based on serial or int id
