@@ -1,7 +1,11 @@
+import 'package:get_it/get_it.dart';
+import 'package:validicitylib/model/block.dart';
 import 'package:validicitylib/validicitylib.dart';
 import 'package:validicityserver/model/project.dart';
 import 'package:validicityserver/model/log.dart';
+import 'package:validicityserver/model/proof.dart';
 import 'package:validicityserver/model/user.dart';
+import 'package:validicityserver/service/chainpoint_service.dart';
 
 import '../validicityserver.dart';
 
@@ -23,6 +27,15 @@ class Sample extends ManagedObject<_Sample> implements _Sample {
   @override
   void willUpdate() {
     modified = new DateTime.now().toUtc();
+  }
+
+  /// Create proof that this Sample exists
+  Future<Proof> createProof(ManagedContext context) async {
+    var proof = Proof();
+    proof.hash = makeHash(
+        "Sample with serial=$serial, signature=$signature and hash=$hash exists.");
+    GetIt.I<ChainpointService>().submit(proof);
+    Query.insertObject(context, proof);
   }
 
   /// Find Sample based on serial or int id

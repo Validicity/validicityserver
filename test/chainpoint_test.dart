@@ -20,7 +20,7 @@ Future main() async {
         ChainpointServiceConfiguration.fromString("publicUriUrl:"),
         harness.context);
     var proof = Proof();
-    var fact = "I will make a game called Tanx";
+    var fact = "I will make a game called Tankfeud";
     proof.hash = makeHash(fact);
     await service.submit(proof);
     print(proof.toString());
