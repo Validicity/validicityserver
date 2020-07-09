@@ -83,7 +83,7 @@ class SampleSubmissionController extends ResourceController {
       q.values.removePropertyFromBackingMap('id');
       await q.insert();
       // And let it create a Proof also
-      await sample.createProof(q.context);
+      await sample.createProof();
     });
     return Response.ok(result);
   }

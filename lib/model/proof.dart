@@ -35,9 +35,10 @@ class Proof extends ManagedObject<_Proof> implements _Proof {
   }
 
   /// Submit this proof hash to Chainpoint
-  Future submit(ManagedContext context) async {
+  Future submit() async {
     await GetIt.I<ChainpointService>().submit(this);
-    return Query.insertObject(context, this);
+    var context = GetIt.I<ManagedContext>();
+    return Query.insertObject<Proof>(context, this);
   }
 
   /// Retrieve this proof from Chainpoint
