@@ -19,6 +19,9 @@ email:
   host: smtp.eu.sparkpostmail.com
   username: SMTP_Injection
   password: somekey  # Insert key here
-  
+
+chainpoint:
+  publicUriUrl:
+
 # prod.validi.city etc
 host: localhost

@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:timezone/standalone.dart';
 import 'package:validicitylib/util.dart';
+import 'package:validicityserver/service/chainpoint_service.dart';
 
 import 'controller/bootstrap_controller.dart';
 import 'controller/organisation_controller.dart';
@@ -31,6 +32,7 @@ class ValidicityServerChannel extends ApplicationChannel {
   AuthServer authServer;
   // MqttService mqttService;
   EmailService emailService;
+  ChainpointService chainpointService;
   StatusController statusController;
   // BasicCredentialVerifier basicCredentialVerifier;
 
@@ -74,10 +76,14 @@ class ValidicityServerChannel extends ApplicationChannel {
     // Create emailService
     emailService = EmailService(config.email, context);
 
+    // Create chainpointService
+    chainpointService = ChainpointService(config.chainpoint, context);
+
     // Register getIts
     GetIt.I.registerSingleton(config);
     // GetIt.I.registerSingleton(mqttService);
     GetIt.I.registerSingleton(emailService);
+    GetIt.I.registerSingleton(chainpointService);
     GetIt.I.registerSingleton(context);
 
     await statusController.init();
@@ -191,6 +197,7 @@ class ValidicityServerConfiguration extends Configuration {
   DatabaseConfiguration database;
   MqttConfiguration mqtt;
   EmailServiceConfiguration email;
+  ChainpointServiceConfiguration chainpoint;
   ValidicityServerSchedulerConfiguration scheduler;
 
   /// This property is required.

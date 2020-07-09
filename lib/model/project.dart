@@ -1,4 +1,5 @@
 import 'package:validicityserver/model/organisation.dart';
+import 'package:validicityserver/model/proof.dart';
 import 'package:validicityserver/model/sample.dart';
 import 'package:validicityserver/model/user.dart';
 
@@ -62,6 +63,9 @@ class _Project {
 
   // All Samples assigned to this Project
   ManagedSet<Sample> samples;
+
+  // All Proofs made in this Project
+  ManagedSet<Proof> proofs;
 
   // All Users with access to this Project
   ManagedSet<UserProject> userProjects;
