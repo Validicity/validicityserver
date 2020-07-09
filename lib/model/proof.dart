@@ -1,7 +1,9 @@
+import 'package:get_it/get_it.dart';
 import 'package:validicitylib/validicitylib.dart';
 import 'package:validicityserver/model/project.dart';
 import 'package:validicityserver/model/log.dart';
 import 'package:validicityserver/model/user.dart';
+import 'package:validicityserver/service/chainpoint_service.dart';
 
 import '../validicityserver.dart';
 
@@ -33,14 +35,15 @@ class Proof extends ManagedObject<_Proof> implements _Proof {
   }
 
   /// Submit this proof hash to Chainpoint
-  submit() {
-    //var session = Chainpoint();
-    //proofId = session.submit(hash);
+  Future submit(ManagedContext context) async {
+    await GetIt.I<ChainpointService>().submit(this);
+    return Query.insertObject(context, this);
   }
 
   /// Retrieve this proof from Chainpoint
-  retrieve() {}
+  Future retrieve() async {}
 
+  /// Extract contents from Chainpoint response on submission
   void extract(Map map) {
     var hashes = map["hashes"];
     hash = hashes.first["hash"];
@@ -56,13 +59,14 @@ class _Proof {
   DateTime created;
   DateTime modified;
 
-  /// The proof identifier allocated by Chainpoint
+  /// The proof identifier allocated by Chainpoint on submission
   String proofId;
 
   /// The submitted cryptographic hash
   String hash;
 
-  /// The proof itself, base64
+  /// The proof itself, base64, when retrieved
+  @Column(nullable: true)
   String proof;
 
   /// The Project of this Proof
