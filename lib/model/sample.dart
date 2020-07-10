@@ -40,7 +40,7 @@ class Sample extends ManagedObject<_Sample> implements _Sample {
       logger.info("Proof created, updating Sample");
       var q = Query<Sample>(transaction);
       q.where((s) => s.id).equalTo(id);
-      q.values.proof = p;
+      q.values.proof.id = p.id;
       await q.updateOne();
     });
   }

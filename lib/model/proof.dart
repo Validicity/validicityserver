@@ -39,7 +39,8 @@ class Proof extends ManagedObject<_Proof> implements _Proof {
   Future submit(ManagedContext transaction) async {
     await GetIt.I<ChainpointService>().submit(this);
     logger.info("Proof submitted");
-    await Query.insertObject<Proof>(transaction, this);
+    var created = await Query.insertObject<Proof>(transaction, this);
+    id = created.id;
     logger.info("Inserted Proof in database");
   }
 
