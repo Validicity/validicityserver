@@ -106,9 +106,9 @@ class _Proof {
   String proof;
 
   // Flags showing anchors ready
-  @Column(defaultValue: "false")
+  @Column(nullable: false, defaultValue: "false")
   bool cal = false;
-  @Column(defaultValue: "false")
+  @Column(nullable: false, defaultValue: "false")
   bool btc = false;
 
   /// The Project of this Proof
