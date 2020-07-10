@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:validicitylib/validicitylib.dart';
 import 'package:validicityserver/model/project.dart';
 import 'package:validicityserver/model/log.dart';
+import 'package:validicityserver/model/sample.dart';
 import 'package:validicityserver/model/user.dart';
 import 'package:validicityserver/service/chainpoint_service.dart';
 
@@ -110,6 +111,10 @@ class _Proof {
   bool cal = false;
   @Column(nullable: false, defaultValue: "false")
   bool btc = false;
+
+  /// The Sample of this Proof, if any
+  @Relate(#proof, isRequired: false)
+  Sample sample;
 
   /// The Project of this Proof
   @Relate(#proofs)

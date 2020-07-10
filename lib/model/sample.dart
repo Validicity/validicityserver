@@ -139,6 +139,10 @@ class _Sample {
   @Relate(#samples)
   Project project;
 
+  /// The Proof of this Sample
+  @Relate(#sample, isRequired: false)
+  Proof proof;
+
   ManagedSet<LogEntry> log;
 
   // All metadata about this Sample

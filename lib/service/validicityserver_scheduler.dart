@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:safe_config/safe_config.dart';
 import 'package:cron/cron.dart';
 import 'package:validicityserver/model/proof.dart';
+import 'package:validicityserver/model/sample.dart';
 
 import '../validicityserver.dart';
 
@@ -19,6 +20,15 @@ class ValidicityServerScheduler {
 
   void start() {
     cron = Cron();
+    cron.schedule(Schedule.parse(config.proofsCreateSchedule), () async {
+      logger.info('Creating proofs...');
+      try {
+        await createProofs();
+      } catch (e, s) {
+        logger.warning("Failed to create proofs: $e stacktrace: $s");
+      }
+      logger.info('Done creating proofs.');
+    });
     cron.schedule(Schedule.parse(config.proofsRetrieveSchedule), () async {
       logger.info('Retrieving proofs...');
       try {
@@ -30,6 +40,18 @@ class ValidicityServerScheduler {
     });
   }
 
+  /// Create proofs for new Samples
+  Future createProofs() async {
+    var context = GetIt.I<ManagedContext>();
+    final query = Query<Sample>(context);
+    query.where((s) => s.proof == null);
+    var samples = await query.fetch();
+    for (var sample in samples.toList()) {
+      await sample.createProof(context);
+    }
+    logger.info("Created ${samples.length} proofs");
+  }
+
   /// Retrieve all proofs not yet completely anchored
   Future retrieveProofs() async {
     var context = GetIt.I<ManagedContext>();
@@ -39,6 +61,7 @@ class ValidicityServerScheduler {
     for (var proof in proofs.toList()) {
       await proof.retrieve(context);
     }
+    logger.info("Retrieved ${proofs.length} proofs");
   }
 
   /// Logic copied from Cron class
@@ -71,4 +94,9 @@ class ValidicityServerSchedulerConfiguration extends Configuration {
   ///
   /// This property is required.
   String proofsRetrieveSchedule;
+
+  /// The cron schedule for proof creation
+  ///
+  /// This property is required.
+  String proofsCreateSchedule;
 }
