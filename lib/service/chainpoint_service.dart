@@ -86,8 +86,8 @@ class ChainpointService {
         var response = await http.get(retrieveUri, headers: headers);
         if (response.statusCode == 200) {
           success = true;
-          Map map = json.decode(response.body);
-          proof.extractRetrieval(map);
+          List proofs = json.decode(response.body);
+          proof.extractRetrieval(proofs.first);
           logger.info('Proof retrieved: ${proof.proofId}');
           return proof;
         } else {
