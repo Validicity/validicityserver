@@ -57,7 +57,7 @@ class SampleSubmissionController extends ResourceController {
         project = projects.first;
       }
     } else {
-      project = sample.project;
+      project = previousSample.project;
       if (sample.previous != previousSample.hash) {
         print("Previous2: ${sample.previous}");
         return Response.badRequest(

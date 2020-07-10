@@ -32,6 +32,7 @@ class Sample extends ManagedObject<_Sample> implements _Sample {
   /// Create proof that this Sample exists
   Future<Proof> createProof(ManagedContext transaction) async {
     var proof = Proof();
+    proof.project = project;
     proof.hash = makeHash(
         "Sample with serial=$serial, signature=$signature and hash=$hash exists.");
     await proof.submit(transaction);
