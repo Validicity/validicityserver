@@ -38,7 +38,6 @@ class SampleSubmissionController extends ResourceController {
         ..where((u) => u.next).isNull();
       query.join(object: (s) => s.project);
       var previousSample = await query.fetchOne();
-      var project;
       // Is there no previous Sample record?
       if (previousSample == null) {
         // OK, this is the first block!
@@ -55,10 +54,11 @@ class SampleSubmissionController extends ResourceController {
             "detail": 'The user $user submitting has no project access'
           });
         } else {
-          project = projects.first;
+          sample.project = projects.first;
         }
       } else {
-        project = previousSample.project;
+        // Then project should be the same as previous
+        sample.project = previousSample.project;
         if (sample.previous != previousSample.hash) {
           print("Previous2: ${sample.previous}");
           return Response.badRequest(
@@ -74,8 +74,7 @@ class SampleSubmissionController extends ResourceController {
           q
             ..where((u) => u.serial).equalTo(serial)
             ..where((u) => u.next).isNull()
-            ..values.next = sample.hash
-            ..values.project = project;
+            ..values.next = sample.hash;
           await q.updateOne();
         }
         // And insert Sample into database
