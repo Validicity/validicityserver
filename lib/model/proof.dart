@@ -106,8 +106,8 @@ class _Proof {
   String proof;
 
   // Flags showing anchors ready
-  bool cal;
-  bool btc;
+  bool cal = false;
+  bool btc = false;
 
   /// The Project of this Proof
   @Relate(#proofs)
