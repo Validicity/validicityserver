@@ -106,8 +106,10 @@ class _Proof {
   String proof;
 
   // Flags showing anchors ready
-  bool cal;
-  bool btc;
+  @Column(defaultValue: "false")
+  bool cal = false;
+  @Column(defaultValue: "false")
+  bool btc = false;
 
   /// The Project of this Proof
   @Relate(#proofs)
