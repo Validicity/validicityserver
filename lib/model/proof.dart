@@ -35,17 +35,52 @@ class Proof extends ManagedObject<_Proof> implements _Proof {
   }
 
   /// Submit this proof hash to Chainpoint
-  Future submit() async {
+  Future submit(ManagedContext transaction) async {
     await GetIt.I<ChainpointService>().submit(this);
-    var context = GetIt.I<ManagedContext>();
-    return Query.insertObject<Proof>(context, this);
+    logger.info("Proof submitted");
+    await Query.insertObject<Proof>(transaction, this);
+    logger.info("Inserted Proof in database");
   }
 
   /// Retrieve this proof from Chainpoint
-  Future retrieve() async {}
+  Future retrieve(ManagedContext transaction) async {
+    // Retrieve this proof
+    await GetIt.I<ChainpointService>().retrieve(this);
+    // Update in database TODO: We don't check if proof was really modified here
+    final query = Query<Proof>(transaction);
+    query.where((p) => p.id).equalTo(id);
+    query.values = this;
+    await query.updateOne();
+    logger.info("Proof retrieved and updated");
+  }
+
+  /* [
+    {
+      "proof_id": "21e44280-8e2d-11e8-8690-0112cb9597ab",
+      "proof": "eJyNU0tuE0EQ5QgcgiWOq/rfs4rEFVixsaq6qvFIwbY8w28Z2LAkRwgJSkBskBBL7mGJw9B2PkCiCFaj6e736r1XVe/O98tyMeqr8cd8HFdDN52+tL3sLddPp2VO/WK17Bfj9IU9HV+v9POj66PTOQ3zzT5mH4VjVWPVsWJ0IKKcHYoIRVKgwDEZ9TZQVgD2RMkIoybnXfyypZn1MlssRTcPDKpzJsEkqZEJtkeTFDJMANEUzj5H4u87yPCcn/XjqBfIGY3fDGCaQJwY+xhcB9h58+SavizXO/oavfd/0rMxrtF7QFuSDanepN8i76I/5zUtylyHozcfD4j14Guhg9n2aLmeXdydLFfDz3v3D48PNg93Snvp/sfl4Yfl6myY08T4sAPvdOzA//ZwE/x+0Q9jh94ai8kBdLHWIGBy9cb5UrUKRlMq+2JMrCa4GL0TMcU1BmtVMwaVxi6piDprIvjisVrMDKHVRBYrkEADYZNBLteoZfvNjCWwDbFoMgFdoFTLTYH7bLkNiVrNtplBaxtQE9Vago/F15jFJirqQLn9RyyCKbnkOCJzlluEzSVyZikugjYj2aL3qc2iVCUomUgckXXgY4g+iYNtlJyhdUCB821C1hZDrcYaUvRM1oOoD4Y4ZsdFqIXLzV0iUQO2CQu5aSRn2iKEWz1pd4AhuKu2eAwddldLWPZ+b992Gbs2WN0l4vB4vdm3QbkFrzlVyyLZVbAgAIk9cFSK2PJrQbY2UetBixY5xtJCUAvVu7/knF2M7HD0drfmJ63Yp8sp7uXssuzp83U/HG327pI4bShdCK2nl4DpdpN+AbZKagM=",
+      "anchors_complete": [
+        "cal"
+      ]
+    }
+  ] */
+  /// Extract contents from Chainpoint response on submission
+  void extractRetrieval(Map map) {
+    proof = map["proof"]; // base64 encoded
+    List<String> anchors = map["anchors_complete"];
+    for (var anchor in anchors) {
+      switch (anchor) {
+        case "cal":
+          cal = true;
+          break;
+        case "btc":
+          btc = true;
+          break;
+      }
+    }
+  }
 
   /// Extract contents from Chainpoint response on submission
-  void extract(Map map) {
+  void extractSubmission(Map map) {
     var hashes = map["hashes"];
     hash = hashes.first["hash"];
     proofId = hashes.first["proof_id"];
@@ -69,6 +104,10 @@ class _Proof {
   /// The proof itself, base64, when retrieved
   @Column(nullable: true)
   String proof;
+
+  // Flags showing anchors ready
+  bool cal;
+  bool btc;
 
   /// The Project of this Proof
   @Relate(#proofs)

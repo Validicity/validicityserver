@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:get_it/get_it.dart';
 import 'package:safe_config/safe_config.dart';
 import 'package:cron/cron.dart';
+import 'package:validicityserver/model/proof.dart';
 
 import '../validicityserver.dart';
 
@@ -17,21 +19,26 @@ class ValidicityServerScheduler {
 
   void start() {
     cron = Cron();
-
-    cron.schedule(Schedule.parse(config.reportsSchedule), () async {
-      logger.info('Creating reports...');
+    cron.schedule(Schedule.parse(config.proofsRetrieveSchedule), () async {
+      logger.info('Retrieving proofs...');
       try {
-        await createReports();
+        await retrieveProofs();
       } catch (e, s) {
-        logger.warning("Failed to create reports: $e stacktrace: $s");
+        logger.warning("Failed to retrieve proofs: $e stacktrace: $s");
       }
-      logger.info('Done creating reports.');
+      logger.info('Done retrieving proofs.');
     });
   }
 
-  /// Create all reports
-  Future createReports() async {
-    // TODO
+  /// Retrieve all proofs not yet completely anchored
+  Future retrieveProofs() async {
+    var context = GetIt.I<ManagedContext>();
+    final query = Query<Proof>(context);
+    query.where((p) => !(p.btc & p.cal));
+    var proofs = await query.fetch();
+    for (var proof in proofs.toList()) {
+      await proof.retrieve(context);
+    }
   }
 
   /// Logic copied from Cron class
@@ -60,8 +67,8 @@ class ValidicityServerSchedulerConfiguration extends Configuration {
   ValidicityServerSchedulerConfiguration.fromMap(Map<dynamic, dynamic> yaml)
       : super.fromMap(yaml);
 
-  /// The cron schedule for reports
+  /// The cron schedule for proof retrieval
   ///
   /// This property is required.
-  String reportsSchedule;
+  String proofsRetrieveSchedule;
 }
