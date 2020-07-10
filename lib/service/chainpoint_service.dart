@@ -4,6 +4,8 @@ import 'dart:math';
 
 import 'package:safe_config/safe_config.dart';
 import 'package:http/http.dart' as http;
+import 'package:validicitylib/api.dart';
+import 'package:validicitylib/error.dart';
 import 'package:validicityserver/model/proof.dart';
 import '../validicityserver.dart';
 
@@ -66,13 +68,14 @@ class ChainpointService {
           return proof;
         } else {
           tries += 1;
-          logger.warning("Failed to submit proof ${proof.id}: $response");
+          logger.warning("Tried to to submit proof ${proof.id}: $response");
         }
       }
-      return null;
-    } on Exception catch (e, s) {
-      logger.warning("Failed to submit proof ${proof.id} : $e stacktrace: $s");
+    } catch (e, s) {
+      logger.severe("Failed to submit proof ${proof.id} : $e stacktrace: $s");
     }
+    throw ValidicityServerException(
+        ValidicityServerError.error_internal_error, "Failed proof submission");
   }
 
   Future retrieve(Proof proof) async {
@@ -95,11 +98,11 @@ class ChainpointService {
           logger.warning("Failed to retrieve proof ${proof.id}: $response");
         }
       }
-      return null;
-    } on Exception catch (e, s) {
-      logger
-          .warning("Failed to retrieve proof ${proof.id} : $e stacktrace: $s");
+    } catch (e, s) {
+      logger.warning("Failed to retrieve proof ${proof.id}: $e stacktrace: $s");
     }
+    throw ValidicityServerException(
+        ValidicityServerError.error_internal_error, "Failed proof submission");
   }
 }
 

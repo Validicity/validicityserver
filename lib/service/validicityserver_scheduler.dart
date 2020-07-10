@@ -47,9 +47,12 @@ class ValidicityServerScheduler {
     query.where((s) => s.proof).isNull();
     var samples = await query.fetch();
     for (var sample in samples.toList()) {
-      await sample.createProof(context);
+      try {
+        await sample.createProof(context);
+      } catch (e) {
+        logger.warning("Failed to create proof for ${sample.id}: $e");
+      }
     }
-    logger.info("Created ${samples.length} proofs");
   }
 
   /// Retrieve all proofs not yet completely anchored
@@ -59,9 +62,12 @@ class ValidicityServerScheduler {
     query.where((p) => p.btc).equalTo(false);
     var proofs = await query.fetch();
     for (var proof in proofs.toList()) {
-      await proof.retrieve(context);
+      try {
+        await proof.retrieve(context);
+      } catch (e) {
+        logger.warning("Failed to retrieve proof with id ${proof.id}: $e");
+      }
     }
-    logger.info("Retrieved ${proofs.length} proofs");
   }
 
   /// Logic copied from Cron class

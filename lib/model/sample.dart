@@ -30,14 +30,19 @@ class Sample extends ManagedObject<_Sample> implements _Sample {
   }
 
   /// Create proof that this Sample exists
-  Future<Proof> createProof(ManagedContext transaction) async {
-    var proof = Proof();
-    proof.project = project;
-    proof.hash = makeHash(
-        "Sample with serial=$serial, signature=$signature and hash=$hash exists.");
-    await proof.submit(transaction);
-    logger.info("Proof created");
-    return proof;
+  Future createProof(ManagedContext context) async {
+    await context.transaction((transaction) async {
+      var p = Proof();
+      p.project = project;
+      p.hash = makeHash(
+          "Sample with serial=$serial, signature=$signature and hash=$hash exists.");
+      await p.submit(transaction);
+      logger.info("Proof created, updating Sample");
+      var q = Query<Sample>(transaction);
+      q.where((s) => s.id).equalTo(id);
+      q.values.proof = p;
+      await q.updateOne();
+    });
   }
 
   /// Find Sample based on serial or int id
