@@ -44,7 +44,7 @@ class ValidicityServerScheduler {
   Future createProofs() async {
     var context = GetIt.I<ManagedContext>();
     final query = Query<Sample>(context);
-    query.where((s) => s.proof == null);
+    query.where((s) => s.proof).isNull();
     var samples = await query.fetch();
     for (var sample in samples.toList()) {
       await sample.createProof(context);
@@ -56,7 +56,7 @@ class ValidicityServerScheduler {
   Future retrieveProofs() async {
     var context = GetIt.I<ManagedContext>();
     final query = Query<Proof>(context);
-    query.where((p) => !(p.btc & p.cal));
+    query.where((p) => p.btc).equalTo(false);
     var proofs = await query.fetch();
     for (var proof in proofs.toList()) {
       await proof.retrieve(context);
