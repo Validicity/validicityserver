@@ -13,7 +13,7 @@ mqtt:
   host: localhost
 
 scheduler:
-  reportsSchedule: '*/1 * * * *' # Once every minute
+  proofsRetrieveSchedule: '*/20 * * * *' # Once every 20 minutes
 
 email:
   host: smtp.eu.sparkpostmail.com
