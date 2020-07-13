@@ -102,7 +102,7 @@ class ChainpointService {
       logger.warning("Failed to retrieve proof ${proof.id}: $e stacktrace: $s");
     }
     throw ValidicityServerException(
-        ValidicityServerError.error_internal_error, "Failed proof submission");
+        ValidicityServerError.error_internal_error, "Failed proof retrieval");
   }
 }
 

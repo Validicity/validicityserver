@@ -68,7 +68,7 @@ class Proof extends ManagedObject<_Proof> implements _Proof {
   /// Extract contents from Chainpoint response on submission
   void extractRetrieval(Map map) {
     proof = map["proof"]; // base64 encoded
-    List<String> anchors = map["anchors_complete"];
+    List anchors = map["anchors_complete"];
     for (var anchor in anchors) {
       switch (anchor) {
         case "cal":
