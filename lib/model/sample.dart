@@ -34,6 +34,7 @@ class Sample extends ManagedObject<_Sample> implements _Sample {
     await context.transaction((transaction) async {
       var p = Proof();
       p.project = project;
+      p.sample = this;
       p.hash = makeHash(
           "Sample with serial=$serial, signature=$signature and hash=$hash exists.");
       await p.submit(transaction);
