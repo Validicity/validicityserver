@@ -20,12 +20,13 @@ class SampleController extends ResourceController {
     return Response.ok(found);
   }
 
-  /// Get Sample chain by serial, in order of creation
+  /// Get last created Sample in chain by serial
   @Operation.get('serial')
   Future<Response> getSample(@Bind.path('serial') String serial) async {
     query
       ..where((sample) => sample.serial).equalTo(serial)
-      ..sortBy((s) => s.created, QuerySortOrder.ascending);
+      ..sortBy((s) => s.created, QuerySortOrder.ascending)
+      ..join(object: (s) => s.proof);
     var found = await query.fetchOne();
     if (found == null) {
       return Response.notFound();

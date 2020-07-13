@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:timezone/standalone.dart';
 import 'package:validicitylib/util.dart';
+import 'package:validicityserver/controller/sample_chain_controller.dart';
 import 'package:validicityserver/service/chainpoint_service.dart';
 
 import 'controller/bootstrap_controller.dart';
@@ -161,13 +162,15 @@ class ValidicityServerChannel extends ApplicationChannel {
       ..route("/sample/[:serial]")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
           .link(() => SampleController(context))
+      ..route("/chain/[:serial]")
+          .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
+          .link(() => SampleChainController(context))
       ..route("/sample/submit/[:serial]")
           .link(() => Authorizer.bearer(authServer, scopes: ["client"]))
           .link(() => SampleSubmissionController(context))
       ..route("/sample/find/[:serial]")
           .link(() => Authorizer.bearer(authServer, scopes: ["client"]))
           .link(() => SampleFindController(context));
-
     return router;
   }
 
