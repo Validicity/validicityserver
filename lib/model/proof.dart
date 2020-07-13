@@ -52,6 +52,7 @@ class Proof extends ManagedObject<_Proof> implements _Proof {
     final query = Query<Proof>(transaction);
     query.where((p) => p.id).equalTo(id);
     query.values = this;
+    query.values.id = null; // Need to remove id
     await query.updateOne();
     logger.info("Proof retrieved and updated");
   }
