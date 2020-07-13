@@ -37,11 +37,7 @@ class Sample extends ManagedObject<_Sample> implements _Sample {
       p.hash = makeHash(
           "Sample with serial=$serial, signature=$signature and hash=$hash exists.");
       await p.submit(transaction);
-      logger.info("Proof created, updating Sample");
-      var q = Query<Sample>(transaction);
-      q.where((s) => s.id).equalTo(id);
-      q.values.proof = proof;
-      await q.updateOne();
+      logger.info("Proof created for sample $id");
     });
   }
 
