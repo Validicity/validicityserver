@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:timezone/standalone.dart';
 import 'package:validicitylib/util.dart';
+import 'package:validicityserver/controller/project_last_sample_controller.dart';
 import 'package:validicityserver/controller/sample_chain_controller.dart';
 import 'package:validicityserver/service/chainpoint_service.dart';
 
@@ -159,6 +160,9 @@ class ValidicityServerChannel extends ApplicationChannel {
       ..route("/project/:projectid/sample/[:id]")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
           .link(() => ProjectSampleController(context))
+      ..route("/project/:projectid/lastsample/[:id]")
+          .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
+          .link(() => ProjectLastSampleController(context))
       ..route("/sample/[:serial]")
           .link(() => Authorizer.bearer(authServer, scopes: ["user"]))
           .link(() => SampleController(context))
