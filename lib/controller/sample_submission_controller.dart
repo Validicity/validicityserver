@@ -82,8 +82,9 @@ class SampleSubmissionController extends ResourceController {
         q.values = sample;
         // We remove the id, should not be there
         q.values.removePropertyFromBackingMap('id');
-        await q.insert();
+        var sam = await q.insert();
         logger.info("All done");
+        return sam;
       });
       return Response.ok(result);
     } catch (e) {
