@@ -80,6 +80,8 @@ class SampleSubmissionController extends ResourceController {
         // And insert Sample into database
         var q = Query<Sample>(transaction);
         q.values = sample;
+        // the requester is responsible for the submission
+        q.values.user.id = user.id;
         // We remove the id, should not be there
         q.values.removePropertyFromBackingMap('id');
         var res = await q.insert();
