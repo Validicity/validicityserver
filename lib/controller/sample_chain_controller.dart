@@ -16,7 +16,9 @@ class SampleChainController extends ResourceController {
     query
       ..where((sample) => sample.serial).equalTo(serial)
       ..sortBy((s) => s.created, QuerySortOrder.ascending)
-      ..join(object: (s) => s.proof);
+      ..join(object: (s) => s.proof)
+      ..join(object: (s) => s.user)
+          .returningProperties((x) => [x.id, x.name, x.avatar]);
     var found = await query.fetch();
     if (found == null) {
       return Response.notFound();

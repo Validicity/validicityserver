@@ -9,6 +9,11 @@ environment:
 
 dependencies:
   aqueduct: ^3.3.0+1
+  # aqueduct: ^4.0.0-b1
+  # aqueduct:
+  #   git: 
+  #     url: https://github.com/stablekernel/aqueduct.git
+  #     path: aqueduct
   safe_config: ^2.0.2
   mqtt_client: ^7.2.1
   pubspec: ^0.1.4
@@ -26,8 +31,13 @@ dependencies:
     #  url: git@github.com:Validicity/validicitylib.git
 
 dependency_overrides:
-  postgres: 2.1.1
+  postgres: 2.1.1 
 
 dev_dependencies:
   test: ^1.6.3
   aqueduct_test: ^1.0.1
+  # aqueduct_test:
+  #   git: 
+  #     url: https://github.com/stablekernel/aqueduct.git
+  #     path: aqueduct_test
+

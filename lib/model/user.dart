@@ -148,7 +148,7 @@ class _User extends ResourceOwnerTableDefinition {
   @Column(nullable: true, omitByDefault: true)
   int lastCode;
 
-  // The full name of the user
+  // The full name of the userß
   @Column(defaultValue: "''")
   String name;
 
@@ -162,11 +162,18 @@ class _User extends ResourceOwnerTableDefinition {
   @Column(defaultValue: "'user'")
   UserType type;
 
+  /// The users avatar, base64 encoded
+  @Column(nullable: true, defaultValue: "null", omitByDefault: true)
+  String avatar;
+
   // All projects I have access to
   ManagedSet<UserProject> userProjects;
 
   /// The log of the User
   ManagedSet<LogEntry> log;
+
+  /// The samples that the user has scanned.
+  ManagedSet<Sample> samples;
 
   /// The Organisation the User belongs to
   @Relate(#users)

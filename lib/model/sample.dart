@@ -147,4 +147,8 @@ class _Sample {
 
   // All metadata about this Sample
   Document metadata;
+
+  // The user that scanned the sample
+  @Relate(#samples, isRequired: false)
+  User user;
 }
