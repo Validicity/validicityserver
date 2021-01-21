@@ -1,8 +1,7 @@
 import 'dart:io';
 
-import 'package:get_it/get_it.dart';
-import 'package:safe_config/safe_config.dart';
 import 'package:cron/cron.dart';
+import 'package:safe_config/safe_config.dart';
 import 'package:validicityserver/model/proof.dart';
 import 'package:validicityserver/model/sample.dart';
 
@@ -42,13 +41,12 @@ class ValidicityServerScheduler {
 
   /// Create proofs for new Samples
   Future createProofs() async {
-    var context = GetIt.I<ManagedContext>();
-    final query = Query<Sample>(context);
+    final query = Query<Sample>(globalContext);
     query.where((s) => s.proof).isNull();
     var samples = await query.fetch();
     for (var sample in samples.toList()) {
       try {
-        await sample.createProof(context);
+        await sample.createProof();
       } catch (e) {
         logger.warning("Failed to create proof for ${sample.id}: $e");
       }
@@ -57,13 +55,12 @@ class ValidicityServerScheduler {
 
   /// Retrieve all proofs not yet completely anchored
   Future retrieveProofs() async {
-    var context = GetIt.I<ManagedContext>();
-    final query = Query<Proof>(context);
+    final query = Query<Proof>(globalContext);
     query.where((p) => p.btc).equalTo(false);
     var proofs = await query.fetch();
     for (var proof in proofs.toList()) {
       try {
-        await proof.retrieve(context);
+        await proof.retrieve(globalContext);
       } catch (e) {
         logger.warning("Failed to retrieve proof with id ${proof.id}: $e");
       }

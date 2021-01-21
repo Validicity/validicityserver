@@ -30,8 +30,8 @@ class Sample extends ManagedObject<_Sample> implements _Sample {
   }
 
   /// Create proof that this Sample exists
-  Future createProof(ManagedContext context) async {
-    await context.transaction((transaction) async {
+  Future createProof() async {
+    await globalContext.transaction((transaction) async {
       var p = Proof();
       p.project = project;
       p.sample = this;
@@ -43,8 +43,8 @@ class Sample extends ManagedObject<_Sample> implements _Sample {
   }
 
   /// Find Sample based on serial or int id
-  static Future<Sample> find(ManagedContext context, String serialOrId) async {
-    var sampleQuery = Query<Sample>(context);
+  static Future<Sample> find(String serialOrId) async {
+    var sampleQuery = Query<Sample>(globalContext);
     var id = int.tryParse(serialOrId);
     if (id == null) {
       sampleQuery.where((u) => u.serial).equalTo(serialOrId);
@@ -55,16 +55,15 @@ class Sample extends ManagedObject<_Sample> implements _Sample {
   }
 
   /// Find Sample, or create one, based on serial
-  static Future<Sample> findOrCreate(
-      ManagedContext context, String serial) async {
-    var query = Query<Sample>(context);
+  static Future<Sample> findOrCreate(String serial) async {
+    var query = Query<Sample>(globalContext);
     query.where((u) => u.serial).equalTo(serial);
     var found = await query.fetchOne();
     if (found != null) {
       return found;
     } else {
       var sample = Sample.fromSerial(serial);
-      query = Query<Sample>(context);
+      query = Query<Sample>(globalContext);
       query.values = sample;
       sample = await query.insert();
       return sample;

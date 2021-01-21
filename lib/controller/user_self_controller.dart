@@ -14,7 +14,7 @@ class UserSelfController extends ResourceController {
   @Operation.get()
   Future<Response> getUser() async {
     // Verify that this user is himself
-    var user = await User.currentUser(query.context, request);
+    var user = await User.currentUser(request);
     query.where((u) => u.id).equalTo(user.id);
     // Join with all Projects user has access to and manages as super user
     var upQuery = query.join(set: (user) => user.userProjects);
@@ -32,7 +32,7 @@ class UserSelfController extends ResourceController {
       @Bind.query('name') String newName,
       @Bind.query('email') String newEmail,
       @Bind.query('password') String newPassword) async {
-    var user = await User.currentUser(query.context, request);
+    var user = await User.currentUser(request);
     if (newPassword != null) {
       user
         ..salt = AuthUtility.generateRandomSalt()

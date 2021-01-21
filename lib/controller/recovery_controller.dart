@@ -14,8 +14,8 @@ class RecoveryController extends ResourceController {
   @Operation.get('username')
   Future<Response> getRecoveryCode(
       @Bind.path('username') String username) async {
-    var user = await User.findByUsername(query.context, username);
-    var sentCode = await user.sendRecoveryCode(query.context);
+    var user = await User.findByUsername(username);
+    var sentCode = await user.sendRecoveryCode();
     if (!sentCode) {
       return Response.serverError(
           body: 'Failed sending recovery code for username $username');

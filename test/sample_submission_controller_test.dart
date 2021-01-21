@@ -64,6 +64,7 @@ Future main() async {
       "organisation": {"id": 1},
       "metadata": {}
     });
+    // todo: register endpoint does not exist
     await harness.adminAgent.post("/register", body: {
       "name": "Project",
       "description": "Cool",

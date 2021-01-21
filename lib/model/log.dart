@@ -17,9 +17,9 @@ class LogEntry extends ManagedObject<_LogEntry> implements _LogEntry {
     modified = new DateTime.now().toUtc();
   }
 
-  static Future<LogEntry> create(ManagedObject obj, ManagedContext context,
+  static Future<LogEntry> create(ManagedObject obj,
       {String message, Map<String, dynamic> entry}) async {
-    var q = Query<LogEntry>(context);
+    var q = Query<LogEntry>(globalContext);
     // Ugly, but... not sure how to do this
     if (obj is Sample) {
       q.values.sample = obj;

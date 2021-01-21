@@ -82,18 +82,18 @@ class ValidicityServerChannel extends ApplicationChannel {
     chainpointService = ChainpointService(config.chainpoint, context);
 
     // Register getIts
-    GetIt.I.registerSingleton(config);
-    // GetIt.I.registerSingleton(mqttService);
-    GetIt.I.registerSingleton(emailService);
-    GetIt.I.registerSingleton(chainpointService);
-    GetIt.I.registerSingleton(context);
+    getIt.registerSingleton(config);
+    // getIt.registerSingleton(mqttService);
+    getIt.registerSingleton(emailService);
+    getIt.registerSingleton(chainpointService);
+    getIt.registerSingleton(context);
 
     await statusController.init();
 
     // Create and start Scheduler if this is the first Isolate
     if (server.identifier == 1) {
       scheduler = ValidicityServerScheduler(config.scheduler, context);
-      GetIt.I.registerSingleton(scheduler);
+      getIt.registerSingleton(scheduler);
       scheduler.start();
     }
 

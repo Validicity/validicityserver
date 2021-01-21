@@ -30,7 +30,7 @@ class UserProjectController extends ResourceController {
     var result = await query.insert();
     if (result != null) {
       // We could do this async (without await) but then testing fails...
-      await LogEntry.create(user, query.context,
+      await LogEntry.create(user,
           message: "Added access to Project ${proj.id}");
     }
     return Response.ok(result);
@@ -94,8 +94,7 @@ class UserProjectController extends ResourceController {
       // TODO: Log errors?
       return Response.notFound();
     } else {
-      LogEntry.create(user, query.context,
-          message: "Removed access to Project $project");
+      LogEntry.create(user, message: "Removed access to Project $project");
       return Response.ok(null);
     }
   }

@@ -5,6 +5,7 @@ import 'package:mailer/mailer.dart';
 import 'package:validicitylib/util.dart';
 import 'package:validicityserver/model/project.dart';
 import 'package:validicityserver/model/log.dart';
+import 'package:validicityserver/model/sample.dart';
 import 'package:validicityserver/service/email_service.dart';
 import 'package:validicityserver/validicityserver.dart';
 
@@ -30,9 +31,9 @@ class User extends ManagedObject<_User>
 
   /// Create a 6 digit random number between 111111-999999
   /// and store it in the database for this User.
-  Future<int> createRecoveryCode(ManagedContext context) async {
+  Future<int> createRecoveryCode() async {
     var code = getRandomRecoveryCode();
-    var query = Query<User>(context);
+    var query = Query<User>(globalContext);
     query
       ..where((u) => u.id).equalTo(id)
       ..values.lastCode = code;
@@ -52,8 +53,8 @@ class User extends ManagedObject<_User>
   }
 
   /// Send recovery code for password reset
-  Future<bool> sendRecoveryCode(ManagedContext context) async {
-    var code = await createRecoveryCode(context);
+  Future<bool> sendRecoveryCode() async {
+    var code = await createRecoveryCode();
     var emailService = GetIt.I<EmailService>();
     return emailService.sendEmail('Validicity password recovery', '''
 Hi!
@@ -74,8 +75,8 @@ regards, Validicity
   }
 
   /// Make a Project accessible to the User
-  Future<UserProject> addProject(Project im, ManagedContext context) async {
-    final join = Query<UserProject>(context);
+  Future<UserProject> addProject(Project im) async {
+    final join = Query<UserProject>(globalContext);
     join
       ..values.user = this
       ..values.project = im;
@@ -83,8 +84,8 @@ regards, Validicity
   }
 
   /// Remove a Project accessible to the User
-  Future removeProject(Project im, ManagedContext context) async {
-    final join = Query<UserProject>(context);
+  Future removeProject(Project im) async {
+    final join = Query<UserProject>(globalContext);
     join
       ..where((u) => u.user).identifiedBy(id)
       ..where((im) => im).identifiedBy(im.id);
@@ -92,8 +93,8 @@ regards, Validicity
   }
 
   /// Do we have a mapping to this Project?
-  Future<bool> canAccessProject(Project im, ManagedContext context) async {
-    final join = Query<UserProject>(context);
+  Future<bool> canAccessProject(Project im) async {
+    final join = Query<UserProject>(globalContext);
     join
       ..where((u) => u.user).identifiedBy(id)
       ..where((im) => im).identifiedBy(im.id);
@@ -101,34 +102,32 @@ regards, Validicity
   }
 
   /// Return all Projects we have access to
-  Future<List<Project>> accessProjects(ManagedContext context) async {
-    final join = Query<UserProject>(context);
+  Future<List<Project>> accessProjects() async {
+    final join = Query<UserProject>(globalContext);
     join..where((u) => u.user).identifiedBy(id);
     var ups = await join.fetch();
     return ups.map((ui) => ui.project).toList();
   }
 
   /// Easy function to find one by id
-  static Future<User> find(ManagedContext context, int id) async {
-    var query = Query<User>(context);
+  static Future<User> find(int id) async {
+    var query = Query<User>(globalContext);
     query.where((user) => user.id).equalTo(id);
     return query.fetchOne();
   }
 
   /// Easy function to find one User by username
-  static Future<User> findByUsername(
-      ManagedContext context, String username) async {
-    var query = Query<User>(context);
+  static Future<User> findByUsername(String username) async {
+    var query = Query<User>(globalContext);
     query.where((user) => user.username).equalTo(username);
     return query.fetchOne();
   }
 
   /// Return the User doing this request
-  static Future<User> currentUser(
-      ManagedContext context, Request request) async {
+  static Future<User> currentUser(Request request) async {
     print("Scopes of user: ${request.authorization.scopes}");
     var userId = request.authorization.ownerID;
-    var user = User.find(context, userId);
+    var user = User.find(userId);
     print("User: $user");
     return user;
   }

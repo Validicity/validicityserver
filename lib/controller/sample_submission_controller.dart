@@ -15,7 +15,7 @@ class SampleSubmissionController extends ResourceController {
       @Bind.path('serial') String serial, @Bind.body() Sample sample) async {
     try {
       // Look up current user
-      var user = await User.currentUser(query.context, request);
+      var user = await User.currentUser(request);
       // Verify that the User has registered a key
       var publicKey = user.publicKey;
       if (publicKey == null) {
@@ -47,7 +47,7 @@ class SampleSubmissionController extends ResourceController {
                   'Incorrect record chaining, first block should currently have "00" for previous');
         }
         // Pick Project from User's access list, we presume only one right now TODO: Fix this
-        var projects = await user.accessProjects(query.context);
+        var projects = await user.accessProjects();
         if (projects.isEmpty) {
           return Response.badRequest(body: {
             "error": "no_project",
@@ -82,9 +82,9 @@ class SampleSubmissionController extends ResourceController {
         q.values = sample;
         // We remove the id, should not be there
         q.values.removePropertyFromBackingMap('id');
-        var sam = await q.insert();
+        var res = await q.insert();
         logger.info("All done");
-        return sam;
+        return res;
       });
       return Response.ok(result);
     } catch (e) {

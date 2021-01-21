@@ -2,6 +2,7 @@ name: validicityserver
 description: The server component of Validicity that keeps track of everything.
 version: 0.3.0
 author: Göran Krampe <goran.krampe@gmail.com>
+publish_to: none
 
 environment:
   sdk: ">=2.8.3"

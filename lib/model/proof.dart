@@ -24,8 +24,8 @@ class Proof extends ManagedObject<_Proof> implements _Proof {
   }
 
   /// Find Proof based on proofId or int id
-  static Future<Proof> find(ManagedContext context, String stringOrInt) async {
-    var proofQuery = Query<Proof>(context);
+  static Future<Proof> find(String stringOrInt) async {
+    var proofQuery = Query<Proof>(globalContext);
     var id = int.tryParse(stringOrInt);
     if (id == null) {
       proofQuery.where((p) => p.proofId).equalTo(stringOrInt);
@@ -36,6 +36,7 @@ class Proof extends ManagedObject<_Proof> implements _Proof {
   }
 
   /// Submit this proof hash to Chainpoint
+  /// Can't use globalContext here because of transaction
   Future submit(ManagedContext transaction) async {
     await GetIt.I<ChainpointService>().submit(this);
     logger.info("Proof submitted");
@@ -45,6 +46,7 @@ class Proof extends ManagedObject<_Proof> implements _Proof {
   }
 
   /// Retrieve this proof from Chainpoint
+  /// Can't use globalContext here because of transaction
   Future retrieve(ManagedContext transaction) async {
     // Retrieve this proof
     await GetIt.I<ChainpointService>().retrieve(this);
