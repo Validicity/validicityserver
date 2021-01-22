@@ -130,6 +130,7 @@ class _Sample {
   /// The serial identifier for the Sample, the NFC tag id?
   String serial;
 
+  @Column(unique: true, nullable: true)
   String comment;
 
   /// The current state of the Sample's lifecycle
