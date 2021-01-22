@@ -27,7 +27,7 @@ class UserSelfController extends ResourceController {
   }
 
   /// Update my own User by username. Can change name, email and/or password.
-  @Operation.put('username')
+  @Operation.put()
   Future<Response> updateUser(@Bind.body() User user) async {
     var requester = await User.currentUser(request);
     if (user.username != requester.username) {
