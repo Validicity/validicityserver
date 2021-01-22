@@ -36,13 +36,13 @@ class UserSelfController extends ResourceController {
               'User ${user.username} not allowed to get User information for username ${requester.username}');
     }
 
-    requester
-      ..avatar = user.avatar
-      ..name = user.name;
+    // requester
+    //   ..avatar = user.avatar
+    //   ..name = user.name;
 
     query
       ..where((u) => u.username).equalTo(user.username)
-      ..values = requester;
+      ..values.avatar = user.avatar;
     var result = await query.updateOne();
     return Response.ok(result);
   }
