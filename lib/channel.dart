@@ -1,4 +1,3 @@
-import 'package:get_it/get_it.dart';
 import 'package:timezone/standalone.dart';
 import 'package:validicitylib/util.dart';
 import 'package:validicityserver/controller/project_last_sample_controller.dart';

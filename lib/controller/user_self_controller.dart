@@ -42,6 +42,7 @@ class UserSelfController extends ResourceController {
 
     query
       ..where((u) => u.username).equalTo(user.username)
+      ..values.name = user.name
       ..values.avatar = user.avatar;
     var result = await query.updateOne();
     return Response.ok(result);

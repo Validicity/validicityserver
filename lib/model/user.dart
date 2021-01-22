@@ -163,7 +163,7 @@ class _User extends ResourceOwnerTableDefinition {
   UserType type;
 
   /// The users avatar, base64 encoded
-  @Column(nullable: true, defaultValue: "null", omitByDefault: true)
+  @Column(nullable: true, defaultValue: "null")
   String avatar;
 
   // All projects I have access to

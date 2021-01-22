@@ -107,4 +107,39 @@ class Harness extends TestHarness<ValidicityServerChannel>
   Future<Map> makeProject(Map organisation) async {
     return (await makeProjectResponse(organisation)).body.as<Map>();
   }
+
+  Future<TestResponse> makeUser({
+    String username = "foo1",
+    String password = "bar1",
+    String name = "Foo Bar",
+    String type = "user",
+    String email = "foo@bar.com",
+    String publicKey,
+    String avatar,
+    int customerId,
+    int lastCode,
+  }) async {
+    return await adminAgent.post("/user", body: {
+      "username": username,
+      "name": name,
+      "type": type,
+      "password": password,
+      "email": email,
+      "lastCode": lastCode,
+      "publicKey": lastCode,
+      "avatar": avatar,
+      "organisation": {"id": customerId},
+    });
+  }
+}
+
+// shorthand for converting a [TestResponse]'s body to a Map
+extension FutureResponseToBody on Future<TestResponse> {
+  Future<Map> get map async => (await this).body.as<Map>();
+  Future<int> get id async => (await this.map)['id'];
+}
+
+extension ResponseToBody on TestResponse {
+  Map get map => this.body.as<Map>();
+  int get id => this.map['id'];
 }
