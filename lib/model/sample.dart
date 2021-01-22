@@ -1,11 +1,9 @@
-import 'package:get_it/get_it.dart';
 import 'package:validicitylib/model/block.dart';
 import 'package:validicitylib/validicitylib.dart';
-import 'package:validicityserver/model/project.dart';
 import 'package:validicityserver/model/log.dart';
+import 'package:validicityserver/model/project.dart';
 import 'package:validicityserver/model/proof.dart';
 import 'package:validicityserver/model/user.dart';
-import 'package:validicityserver/service/chainpoint_service.dart';
 
 import '../validicityserver.dart';
 
@@ -131,6 +129,8 @@ class _Sample {
 
   /// The serial identifier for the Sample, the NFC tag id?
   String serial;
+
+  String comment;
 
   /// The current state of the Sample's lifecycle
   @Column(defaultValue: "'registered'")
