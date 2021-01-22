@@ -26,28 +26,24 @@ class UserSelfController extends ResourceController {
     return Response.ok(found);
   }
 
-  /// Update my own User. Can change name, email and/or password.
-  @Operation.put()
-  Future<Response> updateUser(
-      @Bind.query('name') String newName,
-      @Bind.query('email') String newEmail,
-      @Bind.query('password') String newPassword) async {
-    var user = await User.currentUser(request);
-    if (newPassword != null) {
-      user
-        ..salt = AuthUtility.generateRandomSalt()
-        ..hashedPassword = authServer.hashPassword(user.password, user.salt);
+  /// Update my own User by username. Can change name, email and/or password.
+  @Operation.put('username')
+  Future<Response> updateUser(@Bind.body() User user) async {
+    var requester = await User.currentUser(request);
+    if (user.username != requester.username) {
+      return Response.badRequest(
+          body:
+              'User ${user.username} not allowed to get User information for username ${requester.username}');
     }
-    if (newEmail != null) {
-      user.email = newEmail; // TODO: This should be verified...
-    }
-    if (newName != null) {
-      user.name = newName;
-    }
+
+    requester
+      ..avatar = user.avatar
+      ..name = user.name;
+
     query
-      ..where((u) => u.id).equalTo(user.id)
-      ..values = user;
+      ..where((u) => u.username).equalTo(user.username)
+      ..values = requester;
     var result = await query.updateOne();
-    return new Response.ok(result);
+    return Response.ok(result);
   }
 }
