@@ -136,6 +136,12 @@ class _Sample {
   @Column(nullable: true)
   String location;
 
+  @Column(nullable: true)
+  double latitude;
+
+  @Column(nullable: true)
+  double longitude;
+
   /// The current state of the Sample's lifecycle
   @Column(defaultValue: "'registered'")
   SampleState state;
