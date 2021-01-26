@@ -113,15 +113,15 @@ class ValidicityServerChannel extends ApplicationChannel {
     // We do not use this yet.
     // router.route("/auth/code").link(() => AuthCodeController(authServer));
 
-    // Users can register themselves
-    router
-        .route('/register')
-        .link(() => RegisterController(context, authServer));
-
     // The BootstrapController is for bootstrap purposes and is not protected, it can only be run once
     router
       ..route("/bootstrap")
           .link(() => BootstrapController(context, authServer));
+
+    // Users can register themselves
+    router
+        .route('/register')
+        .link(() => RegisterController(context, authServer));
 
     // The RecoveryController is not protected, obviously
     router

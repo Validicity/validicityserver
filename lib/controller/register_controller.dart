@@ -6,10 +6,13 @@ import 'package:validicityserver/model/project.dart';
 import 'package:validicityserver/model/user.dart';
 
 class RegisterController extends ResourceController {
-  RegisterController(this.context, this.authServer);
+  RegisterController(this.context, this.authServer) {
+    query = Query<User>(context);
+  }
 
   final ManagedContext context;
   final AuthServer authServer;
+  Query<User> query;
 
   @Operation.post()
   Future<Response> createUser(@Bind.body() User user) async {
@@ -28,15 +31,15 @@ class RegisterController extends ResourceController {
     var result = await Query<User>(context, values: user).insert();
 
     // if project with id "5" exist, we add the user to it
-    var query = Query<Project>(context)..where((x) => x.id).equalTo(5);
-    var project = await query.fetchOne();
-    if (project != null) {
-      var userProjectQuery = Query<UserProject>(context)
-        ..values.user = result
-        ..values.project = project;
+    // var query = Query<Project>(context)..where((x) => x.id).equalTo(5);
+    // var project = await query.fetchOne();
+    // if (project != null) {
+    //   var userProjectQuery = Query<UserProject>(context)
+    //     ..values.user = result
+    //     ..values.project = project;
 
-      await userProjectQuery.insert();
-    }
+    //   await userProjectQuery.insert();
+    // }
 
     return Response.ok(result);
   }
