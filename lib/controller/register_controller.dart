@@ -31,7 +31,7 @@ class RegisterController extends ResourceController {
     var result = await Query<User>(context, values: user).insert();
 
     // if project with id "5" exist, we add the user to it
-    var query = Query<Project>(context)..where((x) => x.id).equalTo(5);
+    var query = Query<Project>(context)..where((x) => x.id).equalTo(3);
     var project = await query.fetchOne();
     if (project != null) {
       var userProjectQuery = Query<UserProject>(context)
