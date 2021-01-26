@@ -1,6 +1,7 @@
 import 'package:timezone/standalone.dart';
 import 'package:validicitylib/util.dart';
 import 'package:validicityserver/controller/project_last_sample_controller.dart';
+import 'package:validicityserver/controller/register_controller.dart';
 import 'package:validicityserver/controller/sample_chain_controller.dart';
 import 'package:validicityserver/service/chainpoint_service.dart';
 
@@ -111,6 +112,11 @@ class ValidicityServerChannel extends ApplicationChannel {
     // Set up auth code route- this grants temporary access codes that can be exchanged for token
     // We do not use this yet.
     // router.route("/auth/code").link(() => AuthCodeController(authServer));
+
+    // Users can register themselves
+    router
+        .route('/register')
+        .link(() => RegisterController(context, authServer));
 
     // The BootstrapController is for bootstrap purposes and is not protected, it can only be run once
     router
