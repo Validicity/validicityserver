@@ -21,6 +21,10 @@ class RegisterController extends ResourceController {
       return Response.badRequest(
           body: {"error": "username and password required."});
     }
+    var found = await User.findByUsername(user.username);
+    if (found != null) {
+      return Response.badRequest(body: {"error", "Username taken"});
+    }
 
     user
       ..salt = AuthUtility.generateRandomSalt()
