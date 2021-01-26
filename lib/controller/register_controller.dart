@@ -23,9 +23,8 @@ class RegisterController extends ResourceController {
       ..salt = AuthUtility.generateRandomSalt()
       ..hashedPassword = authServer.hashPassword(user.password, user.salt)
       ..organisation = (Organisation()..id = 5)
-      ..username = user.username
-      ..email = "${user.username}@example.com"
-      ..name = user.name;
+      ..email = "${user.username}@example.com";
+
     var result = await Query<User>(context, values: user).insert();
 
     // if project with id "5" exist, we add the user to it

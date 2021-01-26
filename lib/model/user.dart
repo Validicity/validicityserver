@@ -139,6 +139,9 @@ regards, Validicity
 }
 
 class _User extends ResourceOwnerTableDefinition {
+  @Serialize(input: true, output: false)
+  String password;
+
   @Column(unique: true)
   String email;
 
@@ -148,7 +151,7 @@ class _User extends ResourceOwnerTableDefinition {
   @Column(nullable: true, omitByDefault: true)
   int lastCode;
 
-  // The full name of the userß
+  // The full name of the user
   @Column(defaultValue: "''")
   String name;
 
