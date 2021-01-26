@@ -23,7 +23,7 @@ class RegisterController extends ResourceController {
     }
     var found = await User.findByUsername(user.username);
     if (found != null) {
-      return Response.badRequest(body: {"error", "Username taken"});
+      return Response.badRequest(body: {"error": "Username taken"});
     }
 
     user
