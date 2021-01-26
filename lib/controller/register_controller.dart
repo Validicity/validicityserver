@@ -35,8 +35,8 @@ class RegisterController extends ResourceController {
     var project = await query.fetchOne();
     if (project != null) {
       var userProjectQuery = Query<UserProject>(context)
-        ..values.user = result
-        ..values.project = project;
+        ..values.user.id = result.id
+        ..values.project.id = project.id;
 
       await userProjectQuery.insert();
     }
