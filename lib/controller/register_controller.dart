@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:aqueduct/aqueduct.dart';
+import 'package:validicitylib/error.dart';
 import 'package:validicityserver/model/organisation.dart';
 import 'package:validicityserver/model/project.dart';
 import 'package:validicityserver/model/user.dart';
+import 'package:validicityserver/validicityserver.dart';
 
 class RegisterController extends ResourceController {
   RegisterController(this.context, this.authServer) {
@@ -23,7 +25,7 @@ class RegisterController extends ResourceController {
     }
     var found = await User.findByUsername(user.username);
     if (found != null) {
-      return Response.badRequest(body: {"error": "Username taken"});
+      return errorResponse(ValidicityServerError.error_username_taken, "");
     }
 
     user
