@@ -25,6 +25,11 @@ class UserController extends ResourceController {
       return Response.badRequest(
           body: {"error": "Can not create more than one admin user."});
     }
+    var found = await User.findByUsername(user.username);
+    if (found != null) {
+      return Response.badRequest(body: {"error", "Username taken"});
+    }
+
     user
       ..salt = AuthUtility.generateRandomSalt()
       ..hashedPassword = authServer.hashPassword(user.password, user.salt);
